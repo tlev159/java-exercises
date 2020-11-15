@@ -15,5 +15,7 @@ public class PiMain {
     System.out.println(circleCalculator.calculateArea(4));
 
     System.out.println("A PI értéke: " + circleCalculator.PI);
+
+    System.out.println(circleCalculator.calculatePerimeter(10));
   }
 }
