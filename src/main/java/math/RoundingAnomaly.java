@@ -13,10 +13,9 @@ public class RoundingAnomaly {
 
   public double[] randomNumbers(int size, double max, int scale) {
     double[] randomNums = new double[size];
-    int digitsAfterComa = (int) (Math.pow(10, scale));
-    int maxNumber = (int) (max * digitsAfterComa);
+    double digitsAfterComa = Math.pow(10, scale);
     for (int i = 0; i < size; i++) {
-      randomNums[i] = rnd.nextInt(maxNumber) / digitsAfterComa;
+      randomNums[i] = Math.round(rnd.nextDouble() * max * digitsAfterComa ) / digitsAfterComa;
     }
     return randomNums;
   }
@@ -29,27 +28,30 @@ public class RoundingAnomaly {
     return Math.round(sumBeforRound);
   }
 
-  public double roudBeforSum(double[] randomNums) {
-    double[] afterRound = new double[randomNums.length];
-    for (int i = 0; i < randomNums.length; i++) {
-      afterRound[i] = Math.round(randomNums[i]);
-    }
+  public double sumAfterRound(double[] randomNums) {
     double sumAfterRound = 0.0;
-    for (int i = 0; i < afterRound.length; i++) {
-      sumAfterRound += afterRound[i];
+    for (int i = 0; i < randomNums.length; i++) {
+      sumAfterRound += Math.round(randomNums[i]);
     }
     return sumAfterRound;
   }
 
   public double difference(int size, double max, int scale) {
-    double[] randomNums = new double[size];
-    this.size = size;
-    this.max = max;
-    this.scale = scale;
-    randomNums = randomNumbers(size, max, scale);
-    return difference = roudAfterSum(randomNums) - roudBeforSum(randomNums);
+    double[] randomNums = randomNumbers(size, max, scale);
+    return Math.abs(roudAfterSum(randomNums) - sumAfterRound(randomNums));
   }
 
-
+  public static void main(String[] args) {
+    RoundingAnomaly roundingAnomaly = new RoundingAnomaly();
+    double[] differences = new double[100];
+    for (int i = 0; i < 100; i++) {
+      differences[i] = roundingAnomaly.difference(1000, 1_000_000, 5);
+    }
+    double sum = 0.0;
+    for (int i = 0; i < 100; i++) {
+      sum += differences[i];
+    }
+    System.out.println("A különbségek átlaga: " + sum / 100);
+  }
 
 }
