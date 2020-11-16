@@ -19,20 +19,21 @@ public class Warrior {
   }
 
   public Point getPosition() {
+
     return position;
   }
 
-  public void move(Warrior oneStep) {
+  public void move(Warrior warriorMove) {
     int newX = position.getX();
     int newY = position.getY();
-    if (oneStep.getPosition().getX() - position.getX() > 0) {
+    if (warriorMove.getPosition().getX() - position.getX() > 0) {
       newX++;
-    } else if (oneStep.getPosition().getX() - position.getX() < 0) {
+    } else if (warriorMove.getPosition().getX() - position.getX() < 0) {
       newX--;
     }
-    if (oneStep.getPosition().getY() - position.getY() > 0) {
+    if (warriorMove.getPosition().getY() - position.getY() > 0) {
       newY++;
-    } else if (oneStep.getPosition().getY() - position.getY() < 0) {
+    } else if (warriorMove.getPosition().getY() - position.getY() < 0) {
       newY--;
     }
     position = new Point(newX, newY);
