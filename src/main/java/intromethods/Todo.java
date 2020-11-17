@@ -20,4 +20,9 @@ public class Todo {
   public void finish() {
     finished = true;
   }
+
+  @Override
+  public String toString() {
+    return caption + "(" + finished + ")";
+  }
 }

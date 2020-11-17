@@ -51,4 +51,8 @@ public class TodoList {
      return finishedTodos;
     }
 
+  @Override
+  public String toString() {
+    return todoList.toString();
+  }
 }
