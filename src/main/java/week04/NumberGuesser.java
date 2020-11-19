@@ -10,6 +10,7 @@ public class NumberGuesser {
 
   public static void main(String[] args) {
     Random rnd = new Random();
+
     int guessedNumber = rnd.nextInt(100) + 1;
 
     Scanner scanner = new Scanner(System.in);
