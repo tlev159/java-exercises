@@ -1,7 +1,6 @@
 package controliteration.dictionary;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DictionaryItem {
@@ -14,10 +13,10 @@ public class DictionaryItem {
     addTranslations(translations);
   }
 
-  public void addTranslations(List<String> translation) {
-    for (String tw : translation) {
-      if (!translations.contains(tw)) {
-        translations.add(tw);
+  public void addTranslations(List<String> newTranslations) {
+    for (String newTranslation:newTranslations) {
+      if (!this.translations.contains(newTranslation)) {
+        translations.add(newTranslation);
       }
     }
   }
