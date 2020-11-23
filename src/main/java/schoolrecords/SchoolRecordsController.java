@@ -46,6 +46,7 @@ public class SchoolRecordsController {
       case 10:
         menuTen(); break;
       case 11:
+        System.out.println("További szép napot kívánok! Kiléptem...");
         break;
       default:
         System.out.println("Ilyen menüpont nincs, kérem válasszon újra!");
@@ -83,7 +84,7 @@ public class SchoolRecordsController {
   public void menuFive() { //diák feleltetése
     Scanner scanner = new Scanner(System.in);
     String studentToRepetition = classRecords.repetition().getName();
-    System.out.println("Kérem a felelő (" + studentToRepetition + ") érdemjegyét (A, B, C, D, F");
+    System.out.println("Kérem a felelő (" + studentToRepetition + ") érdemjegyét (A, B, C, D, F)");
     String studentMark = scanner.nextLine();
     System.out.println("Kérem a tantárgy nevét:");
     String studentSubject = scanner.nextLine();
@@ -106,7 +107,11 @@ public class SchoolRecordsController {
   public void menuEigth() {
 //    Scanner scanner = new Scanner(System.in);
     System.out.println("A diákok átlaga: ");
-    System.out.println(classRecords.listStudyResults());
+    for (int i = 0; i < classRecords.listStudyResults().size(); i++) {
+      System.out.print(classRecords.listStudyResults().get(i).getStudentName() + " átlaga: ");
+      System.out.println(classRecords.listStudyResults().get(i).getStudyAverage());
+      System.out.println();
+    }
   }
 
   public void menuNine() {
@@ -118,8 +123,14 @@ public class SchoolRecordsController {
 
   public void menuTen() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
+    System.out.println("Kérem a diák nevét!");
+    Student student = classRecords.findStudentByName(scanner.nextLine());
+    System.out.println("Kérem a tantárgy nevét!");
+    String searchedSubject = scanner.nextLine();
+    Subject searchForSubject = new Subject(searchedSubject);
+    System.out.println(student.getName() + " átlaga " + searchForSubject.getSubjectName()
+            + " tantárgyból: " + student.calculateSubjectAverage(searchForSubject));
+    
   }
 
   public void printMenu() {
