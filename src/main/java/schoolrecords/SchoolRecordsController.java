@@ -14,6 +14,7 @@ public class SchoolRecordsController {
     Scanner scanner = new Scanner(System.in);
     int menuNumber = 0;
     while (menuNumber != 11) {
+//      System.out.println(System.lineSeparator().repeat(50));
       sRC.printMenu();
       System.out.println("Kérem válasszon a menüpontok közül számuk alapján!");
       menuNumber = Integer.parseInt(scanner.nextLine());
@@ -52,6 +53,7 @@ public class SchoolRecordsController {
   }
 
   public void menuOne() {
+    System.out.println("Az osztály tanulóinak neve:");
     System.out.println(classRecords.listStudentNames());
     System.out.println();
   }
@@ -69,42 +71,56 @@ public class SchoolRecordsController {
     classRecords.addStudent(new Student(scanner.nextLine()));
     System.out.println();
   }
-  public void menuFour() {
+
+  public void menuFour() { // diák név alapján törlése
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
+    System.out.println("Kérem a törölni kívánt diák nevét!");
+    Student studentToRemove = classRecords.findStudentByName(scanner.nextLine());
+    classRecords.removeStudent(studentToRemove);
+//    classRecords.removeStudent(new Student(scanner.nextLine()));
   }
-  public void menuFive() {
+
+  public void menuFive() { //diák feleltetése
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
+    String studentToRepetition = classRecords.repetition().getName();
+    System.out.println("Kérem a felelő (" + studentToRepetition + ") érdemjegyét (A, B, C, D, F");
+    String studentMark = scanner.nextLine();
+    System.out.println("Kérem a tantárgy nevét:");
+    String studentSubject = scanner.nextLine();
+    System.out.println("Kérem a tanár nevét:");
+    String studentTutor = scanner.nextLine();
+    System.out.println();
+//    még nincs kész
   }
-  public void menuSix() {
+
+  public void menuSix() { //Osztályátlag kiszámolása
+    System.out.println("Az osztály átlaga: " + classRecords.calculateClassAverage());
+  }
+
+  public void menuSeven() { // Tantárgyi átlag kiszámolása
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
+    System.out.println("A tantárgyat, amely osztályátlagát kéred:");
+    System.out.println(classRecords.calculateClassAverageBySubject(new Subject(scanner.nextLine())));
   }
-  public void menuSeven() {
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
-  }
+
   public void menuEigth() {
-    Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
+//    Scanner scanner = new Scanner(System.in);
+    System.out.println("A diákok átlaga: ");
+    System.out.println(classRecords.listStudyResults());
   }
+
   public void menuNine() {
     Scanner scanner = new Scanner(System.in);
-    System.out.println("Kérem a hozzáadni kívánt diák nevét!");
-    classRecords.addStudent(new Student(scanner.nextLine()));
+    System.out.println("Kérem a diák nevét, akinek az átlagát le szeretné kérdezni!");
+    Student searchedStudent = classRecords.findStudentByName(scanner.nextLine());
+    System.out.println(searchedStudent.getName() + " tanulmányi átlaga: " + searchedStudent.calculateAverage());
   }
+
   public void menuTen() {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Kérem a hozzáadni kívánt diák nevét!");
     classRecords.addStudent(new Student(scanner.nextLine()));
   }
-
 
   public void printMenu() {
     System.out.println("1. Diákok nevének listázása");
