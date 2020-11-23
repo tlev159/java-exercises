@@ -12,8 +12,12 @@ public class ClassRecords {
   private List<Student> students = new ArrayList<>();
 
   public ClassRecords(String className, Random rnd) {
-    this.className = className;
-    this.rnd = rnd;
+    if (isEmpty(className)) {
+      throw new IllegalArgumentException("Classname can't be empty!");
+    } else {
+      this.className = className;
+      this.rnd = rnd;
+    }
   }
 
   public boolean addStudent(Student student) { //felvesz egy diákot az osztályba
@@ -89,8 +93,10 @@ public class ClassRecords {
   }
 
   private boolean isEmpty(String className) {
-
-    return false;
+    if (className.equals("")){
+      return false;
+    }
+    return true;
   }
 
   public String listStudentNames() { //kilistázza a diákok neveit, vesszővel elválsztva
