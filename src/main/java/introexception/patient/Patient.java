@@ -7,8 +7,10 @@ public class Patient {
   private int yearOfBirth;
 
   public Patient(String name, String socialSecurityNumber, int yearOfBirth) {
+    SsnValidator ssnv = new SsnValidator();
     try {
       int validInt = Integer.parseInt(socialSecurityNumber);
+      ssnv.isValidSsn(socialSecurityNumber);
     } catch (IllegalArgumentException iae) {
       throw new IllegalArgumentException("Nem érvényes a TAJ-szám");
     }
