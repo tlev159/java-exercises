@@ -8,7 +8,7 @@ public class ListCounter {
     int sumOfWords = 0;
     for (String each:list) {
       String firstChar = each.substring(0, 1);
-      if (firstChar.toLowerCase().equals("a")) {
+      if ("a".equals(firstChar.toLowerCase())) {
         sumOfWords++;
       }
     }
