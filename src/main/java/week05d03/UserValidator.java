@@ -5,23 +5,20 @@ import java.util.List;
 
 public class UserValidator {
 
-  private List<User> users = new ArrayList<>();
-
-  public List<User> getUsers() {
-    return users;
-  }
-
-  public String validate(List<User> user) {
-    String answer = "All valid";
-    int count = 0;
-    for (User eachUser: user) {
-        if (eachUser.getName() != null && !eachUser.getName().isEmpty() && eachUser.getAge() > 0 && eachUser.getAge() < 120) {
-          count++;
+  public void validate(List<Users> users) {
+    for (Users eachUsers : users) {
+        if (eachUsers.getName() == null) {
+          throw new IllegalArgumentException("Nem sikerült a művelet, mert a felhasználó neve nem lehet null!");
+        }
+        if (eachUsers.getName().isEmpty()) {
+          throw new IllegalArgumentException("Nem sikerült a művelet, mert a felhasználó neve nem lehet üres!");
+        }
+        if (eachUsers.getAge() < 0) {
+          throw new IllegalArgumentException("Nem sikerült a művelet, mert a felhasználó életkora nem lehet negatív!");
+        }
+        if (eachUsers.getAge() > 120) {
+          throw new IllegalArgumentException("Nem sikerült a művelet, mmert a felhasználó életkora nem lehet nagyobb, mint 120");
       }
     }
-    if (count == user.size()) {
-      return answer;
-    } else
-    throw new IllegalArgumentException("IllegalArgumentException");
   }
 }

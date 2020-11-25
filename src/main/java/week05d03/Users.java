@@ -1,11 +1,11 @@
 package week05d03;
 
-public class User {
+public class Users {
 
   private String name;
   private int age;
 
-  public User(String name, int age) {
+  public Users(String name, int age) {
     this.name = name;
     this.age = age;
   }
