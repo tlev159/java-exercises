@@ -30,7 +30,12 @@ public class Store {
   }
 
   public boolean isValidProduct(Product product) {
-    if (products.contains(product) || product.getDate().isBefore(LocalDate.now())) {
+    for (Product prod:products) {
+      if (prod.getName().equals(product)) {
+        return false;
+      }
+    }
+    if (product.getDate().isBefore(LocalDate.now())) {
       return false;
     }
     return true;
