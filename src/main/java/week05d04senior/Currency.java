@@ -2,7 +2,8 @@ package week05d04senior;
 
 public enum Currency {
 
-  HUF(300.0, "HUF"), USD(0.00333, "USD");
+  HUF(300.0, "HUF"),
+  USD(0.003333333333, "USD");
 
   private double changingRate;
   private String currencyName;
