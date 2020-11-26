@@ -7,10 +7,10 @@ public class Employee {
   private int salary;
 
   public Employee(String name, String job, int salary) {
-    if (name == null || name.isEmpty()) {
+    if (isEmpty(name)) {
       throw new IllegalArgumentException("Name must not be empty.");
     }
-    if (job == null || job.isEmpty()) {
+    if (isEmpty(job)) {
       throw new IllegalArgumentException("Job must not be empty.");
     }
     if (salary < 0) {
@@ -39,5 +39,9 @@ public class Employee {
   @Override
   public String toString() {
     return name + " - " + job + " - " + salary + " Ft";
+  }
+
+  public boolean isEmpty(String string) {
+    return string.isEmpty() || string == null;
   }
 }

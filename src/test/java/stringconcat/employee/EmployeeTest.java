@@ -2,6 +2,7 @@ package stringconcat.employee;
 
 
 import org.junit.jupiter.api.Test;
+import stringconcat.employee.Employee;
 
 import static org.junit.jupiter.api.Assertions.*;
 
