@@ -13,7 +13,6 @@ public class WordEraser {
         wordsWithoutWord.append(w).append(" ");
       }
     }
-    wordsWithoutWord.delete(wordsWithoutWord.length() - 1, wordsWithoutWord.length());
-    return wordsWithoutWord.toString();
+    return wordsWithoutWord.toString().trim();
   }
 }
