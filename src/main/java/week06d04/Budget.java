@@ -7,6 +7,10 @@ public class Budget {
 
   List<Item> items = new ArrayList<>();
 
+  public Budget(List<Item> items) {
+    this.items = items;
+  }
+
   public List getItemsByMonth(int month) {
     List<Item> buydInGivenMonth = new ArrayList<>();
     for (Item i : items) {

@@ -9,6 +9,9 @@ public class Item {
   private String name;
 
   public Item(int price, LocalDate date, String name) {
+    if (price < 0) {
+      throw new IllegalArgumentException("Wrong price!");
+    }
     this.price = price;
     this.date = date;
     this.name = name;
