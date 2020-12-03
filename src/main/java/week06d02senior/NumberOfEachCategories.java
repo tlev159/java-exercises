@@ -24,6 +24,6 @@ public class NumberOfEachCategories {
 
   @Override
   public String toString() {
-    return category + ": " + number + " ";
+    return "\n" + category + ": " + number + " pieces";
   }
 }

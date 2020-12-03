@@ -32,7 +32,7 @@ public class Store {
   public List<NumberOfEachCategories> fillCategories() {
     List<NumberOfEachCategories> c = new ArrayList<>();
     for (Product p : products) {
-        if (addToList(p, c)) {
+        if (!addToList(p, c)) {
           c.add(new NumberOfEachCategories(p.getCategory(), 0));
       }
     }
