@@ -11,5 +11,7 @@ public class DigitSumTest {
     DigitSum ds = new DigitSum();
 
     assertEquals(6, ds.sumOfDigits(123));
+    assertEquals(11, ds.sumOfDigits(1235));
+    assertEquals(11, ds.sumOfDigits(-1235));
   }
 }
