@@ -43,7 +43,6 @@ public class Lab {
 
   @Override
   public String toString() {
-    return title + "(completed?: " + completed + "), completed at:" + completedAt +
-            '}';
+    return title + "(completed?: " + completed + "), completed at:" + completedAt;
   }
 }
