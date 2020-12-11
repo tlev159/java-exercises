@@ -5,10 +5,6 @@ public class Truck extends Vehicle {
   public Truck() {
   }
 
-  public Truck(int numberOfGears) {
-    super(numberOfGears);
-  }
-
   public Truck(TransmissionType transmissionType) {
     super(transmissionType);
   }

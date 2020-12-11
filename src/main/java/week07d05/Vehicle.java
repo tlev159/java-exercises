@@ -9,10 +9,6 @@ public class Vehicle {
     this(5,TransmissionType.MANUAL);
   }
 
-  public Vehicle(int numberOfGears) {
-    this(numberOfGears, TransmissionType.MANUAL);
-  }
-
   public Vehicle(TransmissionType transmissionType) {
     this(5, transmissionType);
   }
