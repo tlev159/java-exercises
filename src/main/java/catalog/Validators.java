@@ -4,14 +4,14 @@ import java.util.List;
 
 public class Validators {
 
-  public boolean isBlank(String str) {
+  public static boolean isBlank(String str) {
     if(str == null || "".equals(str.trim())) {
       return true;
     }
     return false;
   }
 
-  public boolean isEmpty(List<String> stringList) {
+  public static boolean isEmpty(List<String> stringList) {
     if(stringList == null || stringList.size() == 0) {
       return true;
     }
