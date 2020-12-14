@@ -10,8 +10,10 @@ public class AudioFeatures implements Feature{
   private List<String> performers = new ArrayList<>();
   private String title;
 
+  Validators valid = new Validators();
+
   public AudioFeatures(String title, int length, List<String> performers) {
-    if (title.isBlank()) {
+    if (valid.isBlank(title)) {
       throw new IllegalArgumentException("Title must be not empty or null!");
     }
     this.title = title;
@@ -19,14 +21,14 @@ public class AudioFeatures implements Feature{
       throw new IllegalArgumentException("Length is not valid!");
     }
     this.length = length;
-    if (performers.isEmpty()) {
+    if (valid.isEmpty(performers)) {
       throw new IllegalArgumentException("Performerlist is not valid!");
     }
     this.performers = performers;
   }
 
   public AudioFeatures(String title, int length, List<String> performers, List<String> composer) {
-    if (title.isBlank()) {
+    if (valid.isBlank(title)) {
       throw new IllegalArgumentException("Title must be not empty or null!");
     }
     this.title = title;
@@ -34,7 +36,7 @@ public class AudioFeatures implements Feature{
       throw new IllegalArgumentException("Length is not valid!");
     }
     this.length = length;
-    if (performers.isEmpty()) {
+    if (valid.isEmpty(performers)) {
       throw new IllegalArgumentException("Performerlist is not valid!");
     }
     this.performers = performers;
