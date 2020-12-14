@@ -6,9 +6,6 @@ public class Robot {
     String[] m = move.trim().split("");
     int[] position = {0,0};
     for (String c:m) {
-      if (!"B".equals(c.toUpperCase()) && !"F".equals(c.toUpperCase()) && !"J".equals(c.toUpperCase()) && !"L".equals(c.toUpperCase())) {
-        throw new IllegalArgumentException("Csak F, L, B, J betűk lehetnek!");
-      }
       takeTheMove(c, position);
     }
     return position;
@@ -18,9 +15,6 @@ public class Robot {
 
     String[] m = move.trim().split("");
     for (String c:m) {
-      if (!"B".equals(c.toUpperCase()) && !"F".equals(c.toUpperCase()) && !"J".equals(c.toUpperCase()) && !"L".equals(c.toUpperCase())) {
-        throw new IllegalArgumentException("Csak F, L, B, J betűk lehetnek!");
-      }
       takeTheMove(c, position);
     }
     return "Pos.(x,y): " + position[0] + "," + position[1];
@@ -30,16 +24,18 @@ public class Robot {
     switch (c) {
       case "B":
         moveLeft(position);
-        break;
+        return;
       case "F":
         moveUp(position);
-        break;
+        return;
       case "J":
         moveRight(position);
-        break;
+        return;
       case "L":
         moveDown(position);
-        break;
+        return;
+      default:
+        throw new IllegalArgumentException("Csak F, L, B, J betűk lehetnek!");
     }
 
   }

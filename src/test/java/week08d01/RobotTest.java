@@ -30,8 +30,6 @@ public class RobotTest {
     assertEquals(goal[1], rob.move(movement)[1]);
   }
 
-
-
   @Test
   public void robotTest() {
     Robot rob = new Robot();
