@@ -11,7 +11,7 @@ public class Lottery {
     List<Integer> lotteryNumbers = new ArrayList<>();
     int i = 0;
     while (i < numbers) {
-      int number = rnd.nextInt(interval + 1);
+      int number = rnd.nextInt(interval) + 1;
       if (!lotteryNumbers.contains(number)) {
         lotteryNumbers.add(number);
         i++;
