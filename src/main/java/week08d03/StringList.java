@@ -8,7 +8,7 @@ import java.util.List;
 public class StringList {
 
   public List<String> stringListsUnion(List<String> first, List<String> second) {
-    List<String> result = first;
+    List<String> result = new ArrayList<>(first);
       for (String b:second) {
         if (!result.contains(b)) {
           result.add(b);
