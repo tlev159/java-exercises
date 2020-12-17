@@ -1,7 +1,5 @@
 package week08d04;
 
-import catalog.PrintedFeatures;
-
 public class Trainer {
 
   private CanMark canMark;
