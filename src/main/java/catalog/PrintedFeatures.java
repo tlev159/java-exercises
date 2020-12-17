@@ -20,7 +20,7 @@ public class PrintedFeatures implements Feature{
     }
     this.numberOfPages = numberOfPages;
     if (valid.isEmpty(authors)) {
-      throw new IllegalArgumentException("Autor must not be empty or nul!");
+      throw new IllegalArgumentException("Author must not be empty or nul!");
     }
     this.authors = authors;
   }
@@ -29,13 +29,12 @@ public class PrintedFeatures implements Feature{
     return numberOfPages;
   }
 
-  @Override
   public List<String> getContributors() {
     return authors;
   }
 
-  @Override
   public String getTitle() {
     return title;
   }
+
 }

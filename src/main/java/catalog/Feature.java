@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface Feature {
 
-  List<String> getContributors();
+//  List<String> getContributors(List<CatalogItem> catalogItems);
 
   String getTitle();
 

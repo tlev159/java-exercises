@@ -22,12 +22,12 @@ public class AudioFeatures implements Feature{
     }
     this.length = length;
     if (valid.isEmpty(performers)) {
-      throw new IllegalArgumentException("Performerlist is not valid!");
+      throw new IllegalArgumentException("Performer list is not valid!");
     }
     this.performers = performers;
   }
 
-  public AudioFeatures(String title, int length, List<String> performers, List<String> composer) {
+  public AudioFeatures(String title, int length, List<String> composer, List<String> performers) {
     if (valid.isBlank(title)) {
       throw new IllegalArgumentException("Title must be not empty or null!");
     }
@@ -47,7 +47,6 @@ public class AudioFeatures implements Feature{
     return length;
   }
 
-  @Override
   public List<String> getContributors() {
     List<String> composersAndPerformers = new ArrayList<>();
     composersAndPerformers.addAll(composer);
@@ -55,7 +54,6 @@ public class AudioFeatures implements Feature{
     return composersAndPerformers;
   }
 
-  @Override
   public String getTitle() {
     return title;
   }
