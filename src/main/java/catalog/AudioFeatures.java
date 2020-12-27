@@ -37,7 +37,7 @@ public class AudioFeatures implements Feature{
     }
     this.length = length;
     if (valid.isEmpty(performers)) {
-      throw new IllegalArgumentException("Performerlist is not valid!");
+      throw new IllegalArgumentException("Performers list is not valid!");
     }
     this.performers = performers;
     this.composer = composer;
@@ -49,8 +49,8 @@ public class AudioFeatures implements Feature{
 
   public List<String> getContributors() {
     List<String> composersAndPerformers = new ArrayList<>();
-    composersAndPerformers.addAll(composer);
     composersAndPerformers.addAll(performers);
+    composersAndPerformers.addAll(composer);
     return composersAndPerformers;
   }
 
