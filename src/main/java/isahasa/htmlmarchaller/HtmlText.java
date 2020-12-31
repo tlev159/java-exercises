@@ -1,8 +1,8 @@
-package isahasa;
+package isahasa.htmlmarchaller;
 
 public class HtmlText implements TextSource {
 
-  private String plainText;
+  private final String plainText;
 
   public HtmlText(String plainText) {
     this.plainText = plainText;

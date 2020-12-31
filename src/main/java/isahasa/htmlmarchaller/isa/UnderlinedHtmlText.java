@@ -1,6 +1,6 @@
-package isahasa.isa;
+package isahasa.htmlmarchaller.isa;
 
-import isahasa.HtmlText;
+import isahasa.htmlmarchaller.HtmlText;
 
 public class UnderlinedHtmlText extends HtmlText {
 

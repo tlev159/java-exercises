@@ -6,13 +6,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class BoldTest {
+public class ItalicTest {
   @Test
   public void getPlainText() {
     TextSourceImplementation textSourceImplementation = new TextSourceImplementation("qwe");
-    Bold bold = new Bold(textSourceImplementation);
+    Italic italic = new Italic(textSourceImplementation);
 
-    assertEquals("<b>qwe</b>", bold.getPlainText());
+    assertEquals("<i>qwe</i>", italic.getPlainText());
   }
 
 }

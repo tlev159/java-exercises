@@ -1,7 +1,6 @@
 package isahasa.htmlmarchaller.isa;
 
 
-import isahasa.isa.ItalicHtmlText;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -5,14 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-public class BoldTest {
+public class UnderlinedTest {
   @Test
   public void getPlainText() {
     TextSourceImplementation textSourceImplementation = new TextSourceImplementation("qwe");
-    Bold bold = new Bold(textSourceImplementation);
+    Underlined underlined = new Underlined(textSourceImplementation);
 
-    assertEquals("<b>qwe</b>", bold.getPlainText());
+    assertEquals("<u>qwe</u>", underlined.getPlainText());
   }
 
 }

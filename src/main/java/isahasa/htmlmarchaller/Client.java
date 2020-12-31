@@ -1,4 +1,4 @@
-package isahasa;
+package isahasa.htmlmarchaller;
 
 import java.nio.charset.StandardCharsets;
 
