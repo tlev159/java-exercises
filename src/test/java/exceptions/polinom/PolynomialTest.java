@@ -50,15 +50,15 @@ public class PolynomialTest {
     double x = 1;
     assertEquals(x * x + 2 * x + 3, p.evaluate(x));
 
-//    x = 2;
-//    assertEquals(x * x + 2 * x + 3, p.evaluate(x));
-//
-//    x = -2;
-//    assertEquals(x * x + 2 * x + 3, p.evaluate(x));
+    x = 2;
+    assertEquals(x * x + 2 * x + 3, p.evaluate(x));
 
-//    Polynomial p2 = new Polynomial(new double[]{1, 1, 0, 1});
-//    x = 3;
-//    assertEquals(x * x * x + x * x + 1, p2.evaluate(x));
+    x = -2;
+    assertEquals(x * x + 2 * x + 3, p.evaluate(x));
+
+    Polynomial p2 = new Polynomial(new double[]{1, 1, 0, 1});
+    x = 3;
+    assertEquals(x * x * x + x * x + 1, p2.evaluate(x));
   }
 
 }

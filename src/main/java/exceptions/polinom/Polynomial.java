@@ -38,9 +38,11 @@ public class Polynomial {
   }
 
   public double evaluate(double x) {
+    double n = coefficients.length - 1;
     double result = 0.0;
     for (double d:coefficients) {
-      result += d * x;
+      result += d * Math.pow(x, n);
+      n--;
     }
     return result;
   }
