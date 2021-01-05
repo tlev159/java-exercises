@@ -5,16 +5,6 @@ import java.util.List;
 
 public class Hiking {
 
-  private double longitude;
-  private double latitude;
-  private double height;
-
-  public Hiking(double longitude, double latitude, double height) {
-    this.longitude = longitude;
-    this.latitude = latitude;
-    this.height = height;
-  }
-
   public double getPlusElevation(List<Double> heightList) {
     if (heightList == null) {
       throw new IllegalArgumentException("List must be not null!");
