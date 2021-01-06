@@ -25,11 +25,14 @@ public class Cv {
   public int findSkillLevelByName(String str) {
     int searchedSkinLevel = 0;
     for (Skill s: skills) {
-      System.out.println(s.getLevel());
-      System.out.println(s.getLevel());
-      if (s.getName().equals(str)) {
-        searchedSkinLevel = s.getLevel();
+      System.out.println(s.getName());
+      System.out.println(s.getLevel() + str);
+      if (str.equals(s.getName())) {
+        return s.getLevel();
       }
+    }
+    if (searchedSkinLevel == 0) {
+      throw new SkillNotFoundException("Skill not found");
     }
     return searchedSkinLevel;
   }
@@ -55,4 +58,5 @@ public class Cv {
   public List<Skill> getSkills() {
     return skills;
   }
+
 }
