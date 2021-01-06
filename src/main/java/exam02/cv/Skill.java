@@ -17,4 +17,9 @@ public class Skill {
   public int getLevel() {
     return level;
   }
+
+  @Override
+  public String toString() {
+    return name + " (" + level + ")";
+  }
 }
