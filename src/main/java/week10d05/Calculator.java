@@ -11,7 +11,7 @@ public class Calculator {
     }
     int sum = 0;
     Arrays.sort(arr);
-    for (int i = 0; i < arr.length; i++) {
+    for (int i = 0; i < 4; i++) {
       sum+= arr[i];
     }
     return sum;
