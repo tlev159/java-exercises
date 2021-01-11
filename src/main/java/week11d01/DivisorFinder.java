@@ -10,7 +10,7 @@ public class DivisorFinder {
     int number = n;
     int result = 0;
     for (int i = 0; i < numberForLength.length(); i++) {
-      if (n % (number % 10) == 0) {
+      if ((number % 10) != 0 && n % (number % 10) == 0) {
         result++;
       }
       number /= 10;

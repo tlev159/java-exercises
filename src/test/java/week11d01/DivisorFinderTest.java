@@ -9,7 +9,7 @@ class DivisorFinderTest {
   @Test
   void findDivisors() {
     assertEquals(2, new DivisorFinder().findDivisors(1425));
-    assertEquals(2, new DivisorFinder().findDivisors(351));
+    assertEquals(2, new DivisorFinder().findDivisors(3501));
   }
 
   @Test
