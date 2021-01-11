@@ -6,7 +6,7 @@ public class DivisorFinder {
     if (n == 0) {
       throw new IllegalArgumentException("Invalid number!");
     }
-    String numberForLength = "" + n;
+    String numberForLength = Integer.toString(n);
     int number = n;
     int result = 0;
     for (int i = 0; i < numberForLength.length(); i++) {
