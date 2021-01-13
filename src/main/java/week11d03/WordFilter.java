@@ -11,14 +11,10 @@ public class WordFilter {
     }
     List<String> result = new ArrayList<>();
     for (String s:words) {
-      boolean isInclude = false;
       for (int i = 0; i < s.length(); i++) {
-        if (s.charAt(i) == c) {
-          isInclude = true;
+        if (s.indexOf(c) >= 0) {
+          result.add(s);
         }
-      }
-      if (isInclude) {
-        result.add(s);
       }
     }
     return result;
