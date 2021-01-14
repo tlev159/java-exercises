@@ -2,6 +2,8 @@ package week11d04;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -24,7 +26,9 @@ public class FilesSum {
 
   public int readFile(String fileName) {
     int readedNumber = 0;
-    Path path = Path.of("src/main/java/week11d04/" + fileName);
+    String sepChar = FileSystems.getDefault().getSeparator();
+    String relativPath = "src" + sepChar + "main" + sepChar + "java" + sepChar + "week11d04" + sepChar;
+    Path path = Path.of(relativPath + fileName);
     if (Files.isRegularFile(path)) {
       try {
         readedNumber = Integer.parseInt(Files.readString(path));
@@ -39,4 +43,5 @@ public class FilesSum {
     FilesSum fs = new FilesSum();
     System.out.println("Eredmény: " + fs.sumNumbers());
   }
+
 }
