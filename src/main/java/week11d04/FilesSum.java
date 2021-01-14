@@ -27,7 +27,7 @@ public class FilesSum {
   public int readFile(String fileName) {
     int readedNumber = 0;
     String sepChar = FileSystems.getDefault().getSeparator();
-    String relativPath = "src" + sepChar + "main" + sepChar + "java" + sepChar + "week11d04" + sepChar;
+    String relativPath = "src" + sepChar + "main" + sepChar + "resources" + sepChar + "week11d04" + sepChar;
     Path path = Path.of(relativPath + fileName);
     if (Files.isRegularFile(path)) {
       try {
