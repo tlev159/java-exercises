@@ -1,8 +1,6 @@
 package week11d04;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,15 +8,10 @@ import java.nio.file.Path;
 public class FilesSum {
 
   public int sumNumbers() {
-    String placeholder = "";
     int sum = 0;
     for (int i = 0; i < 100; i++) {
-      if (i < 10) {
-        placeholder = "0";
-      } else {
-        placeholder = "";
-      }
-      String fileName = "number" + placeholder + i + ".txt";
+      String fileName = String.format("number%02d.txt", i);
+//      String fileName = "number" + (i < 10 ? "0" + i : i);
       sum += readFile(fileName);
     }
     return sum;
