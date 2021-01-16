@@ -2,8 +2,6 @@ package ioreadstring.transaction;
 
 public class BankAccount {
 
-  private static final String SEPARATOR = ";";
-
   private String name;
   private String accountNumber;
   private int balance;
