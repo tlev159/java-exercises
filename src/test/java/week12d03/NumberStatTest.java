@@ -12,6 +12,13 @@ class NumberStatTest {
     NumberStat ns = new NumberStat();
 
     assertEquals(3, ns.lowestPresentInList("numberstat.txt"));
+  }
+
+  @Test
+  void lowestPresentInList2() {
+
+    NumberStat ns = new NumberStat();
+
     assertEquals(3, ns.lowestPresentInList("numberstat2.txt"));
   }
 }

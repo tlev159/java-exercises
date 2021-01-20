@@ -18,22 +18,20 @@ public class NumberStat {
 
   public int lowestPresentInList(String pathString) {
     numbersToList(pathString);
-    Collections.sort(numbers);
-    int result = numbers.get(0);
-    int sumOf = numbers.size();
-    for (Integer n:numbers) {
+    List<Integer> sortedNumbers = new ArrayList<>(numbers);
+    Collections.sort(sortedNumbers);
+    for (Integer n:sortedNumbers) {
       int sum = 0;
-      for (int i = 0; i < numbers.size(); i++) {
-        if (n == numbers.get(i)) {
+      for (int i = 0; i < sortedNumbers.size(); i++) {
+        if (n == sortedNumbers.get(i)) {
           sum++;
         }
       }
-      if (sum < sumOf) {
-        sumOf = sum;
-        result = n;
-      }
+        if (sum == 1) {
+          return n;
+        }
     }
-    return result;
+    throw new IllegalArgumentException("No result for this!");
   }
 
   public void numbersToList(String pathString) {
@@ -66,4 +64,7 @@ public class NumberStat {
     }
   }
 
+  public List<Integer> getNumbers() {
+    return new ArrayList<>(numbers);
+  }
 }
