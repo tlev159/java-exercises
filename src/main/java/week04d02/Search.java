@@ -1,12 +1,12 @@
-package week04;
+package week04d02;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchCharIndex {
+public class Search {
 
   public static void main(String[] args) {
-    SearchCharIndex searchCharIndex = new SearchCharIndex();
+    Search searchCharIndex = new Search();
 
     System.out.println(getIndexesOfChar("ketchup", 'e'));
     System.out.println(getIndexesOfChar("kefe", 'e'));
