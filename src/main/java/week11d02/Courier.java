@@ -1,9 +1,6 @@
 package week11d02;
 
-import exceptionmulticatch.converter.InvalidBinaryStringException;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Courier {
