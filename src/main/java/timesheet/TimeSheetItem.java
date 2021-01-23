@@ -1,59 +1,54 @@
 package timesheet;
 
-
-import org.junit.jupiter.api.Test;
-
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.Month;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 
 public class TimeSheetItem {
 
-    TimeSheetItem timeSheetItem = new TimeSheetItem(
-            new Employee("John", "Connor"),
-            new Project("Java"),
-            LocalDateTime.of(2013, Month.JANUARY, 27, 8, 0, 0),
-            LocalDateTime.of(2013, Month.JANUARY, 27, 16, 10, 0)
-    );
+    private Employee employee;
+    private Project project;
+    private LocalDateTime beginDate;
+    private LocalDateTime endDate;
 
-
-    @Test
-    public void createTimeSheetItem() {
-
-        assertEquals("John Connor", timeSheetItem.getEmployee().getName());
-        assertEquals("Java", timeSheetItem.getProject().getName());
-        assertEquals(LocalDateTime.of(2013, Month.JANUARY, 27, 8, 0, 0), timeSheetItem.getBeginDate());
-        assertEquals(LocalDateTime.of(2013, Month.JANUARY, 27, 16, 10, 0), timeSheetItem.getEndDate());
+    public TimeSheetItem(Employee employee, Project project, LocalDateTime beginDate, LocalDateTime endDate) {
+        if (employee == null || project == null) {
+            throw new IllegalArgumentException("Wrong employee or project!");
+        }
+        this.employee = employee;
+        this.project = project;
+        if (isTheSameDay(beginDate, endDate) && isBeginBeforeEnd(beginDate, endDate)) {
+            this.beginDate = beginDate;
+            this.endDate = endDate;
+        } else {
+            throw new IllegalArgumentException("Wrong dates!");
+        }
     }
 
-    @Test
-    public void notSameDateTest() {
-        assertThrows(IllegalArgumentException.class, () -> new TimeSheetItem(
-                new Employee("John", "Connor"),
-                new Project("Java"),
-                LocalDateTime.of(2013, Month.JANUARY, 26, 8, 0, 0),
-                LocalDateTime.of(2013, Month.JANUARY, 27, 16, 10, 0)
-        ));
-
-
+    public boolean isTheSameDay(LocalDateTime begin, LocalDateTime end) {
+        return begin.toLocalDate().equals(end.toLocalDate());
     }
 
-    @Test
-    public void beginDateLaterThanEndTest() {
-        assertThrows(IllegalArgumentException.class, () -> new TimeSheetItem(
-                new Employee("John", "Connor"),
-                new Project("Java"),
-                LocalDateTime.of(2013, Month.JANUARY, 27, 16, 0, 0),
-                LocalDateTime.of(2013, Month.JANUARY, 27, 8, 10, 0)
-        ));
+    public boolean isBeginBeforeEnd(LocalDateTime begin, LocalDateTime end) {
+        return begin.isBefore(end);
     }
 
+    public long hoursBetweenDates() {
+        return Duration.between(beginDate, endDate).toHours();
+    }
 
-    @Test
-    public void countDifferenceBetweenDatesTest() {
-        assertEquals(8L, timeSheetItem.hoursBetweenDates());
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public LocalDateTime getBeginDate() {
+        return beginDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 }
