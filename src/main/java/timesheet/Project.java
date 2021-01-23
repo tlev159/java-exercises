@@ -1,16 +1,15 @@
 package timesheet;
 
-
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class Project {
 
-    Project project = new Project("Java");
+    private String name;
 
-    @Test
-    public void createProjectTest() {
-        assertEquals("Java", project.getName());
+    public Project(String name) {
+        this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
+
 }
