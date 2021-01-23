@@ -1,24 +1,25 @@
 package timesheet;
 
-
-import org.junit.jupiter.api.Test;
-
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class ReportLine {
 
-    ReportLine reportLine = new ReportLine(new Project("Java"), 10);
+  private Project projectName;
+  private long time;
 
-    @Test
-    public void createReportLine() {
-        assertEquals("Java", reportLine.getProject().getName());
-        assertEquals(10L, reportLine.getTime());
-    }
+  public ReportLine(Project projectName, long time) {
+    this.projectName = projectName;
+    this.time = time;
+  }
 
-    @Test
-    public void setTimeTest() {
-        reportLine.addTime(2);
-        assertEquals(12L, reportLine.getTime());
-    }
+  public Project getProjectName() {
+    return projectName;
+  }
+
+  public long getTime() {
+    return time;
+  }
+
+  @Override
+  public String toString() {
+    return projectName + "\t" + time;
+  }
 }

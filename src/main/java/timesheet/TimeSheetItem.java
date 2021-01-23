@@ -33,7 +33,7 @@ public class TimeSheetItem {
     }
 
     public long hoursBetweenDates() {
-        return Duration.between(beginDate, endDate).toHours();
+        return (long) Duration.between(beginDate, endDate).toHours();
     }
 
     public Employee getEmployee() {
