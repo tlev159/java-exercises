@@ -44,7 +44,7 @@ public class ResultCalculatorTest {
         assertEquals(6, rc.getProductions().get(5).getId());
         assertEquals("Magician", rc.getProductions().get(5).getName());
     }
-//
+
 //
 //    @Test
 //    public void calculateVotesTest() {
