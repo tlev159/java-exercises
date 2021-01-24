@@ -19,32 +19,27 @@ public class SalaryWriter {
   }
 
   public void writeNamesAndSalaries(Path file) {
-    List<String> lines = makeLinse();
     try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(file))){
-      for (String s:lines) {
-        writer.println(s);
+      for (String s:salaries) {
+        writer.print(s);
+        writer.print(": ");
+        writer.println(addSalary(s));
       }
     } catch (IOException ioe) {
       throw new IllegalStateException("Can not write file!");
     }
   }
 
-  private List<String> makeLinse() {
-    List<String> line = new ArrayList<>();
-    for (String name:salaries) {
+  private String addSalary(String name) {
       switch (name.split(" ")[0]) {
         case "Dr.":
-          line.add(name + ": " + 500_000);
-          break;
+          return "500000";
         case "Mr.":
         case "Mrs.":
-          line.add(name + ": " + 200_000);
-          break;
+          return "200000";
         default:
-          line.add(name + ": " + 100_000);
+          return "100000";
       }
-    }
-    return line;
   }
 
   public List<String> getSalaries() {
