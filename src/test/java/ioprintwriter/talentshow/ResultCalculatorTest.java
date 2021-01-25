@@ -45,34 +45,34 @@ public class ResultCalculatorTest {
         assertEquals("Magician", rc.getProductions().get(5).getName());
     }
 
-//
-//    @Test
-//    public void calculateVotesTest() {
-//        rc.readTalents(talentsFile);
-//        rc.calculateVotes(votesFile);
-//        int testNum = 0;
-//
-//        for (Vote v : rc.getVotes()) {
-//            if (v.getId() == 10) {
-//                testNum = v.getNumber();
-//            }
-//        }
-//
-//        assertEquals(4, testNum);
-//    }
-//
-//
-//    @Test
-//    public void writeResultToFileTest() throws IOException {
-//        rc.readTalents(talentsFile);
-//        rc.calculateVotes(votesFile);
-//
-//        Path resultFile = new File(folder, "test3.txt").toPath();
-//
-//        rc.writeResultToFile(resultFile);
-//        List<String> results = Files.readAllLines(resultFile);
-//        assertTrue(results.contains("9 Singer 6"));
-//
-//        assertEquals("Winner: Actors_From_Shadow", results.get(results.size() - 1));
-//    }
+
+    @Test
+    public void calculateVotesTest() {
+        rc.readTalents(talentsFile);
+        rc.calculateVotes(votesFile);
+        int testNum = 0;
+
+        for (Vote v : rc.getVotes()) {
+            if (v.getId() == 10) {
+                testNum = v.getNumber();
+            }
+        }
+
+        assertEquals(4, testNum);
+    }
+
+
+    @Test
+    public void writeResultToFileTest() throws IOException {
+        rc.readTalents(talentsFile);
+        rc.calculateVotes(votesFile);
+
+        Path resultFile = new File(folder, "test3.txt").toPath();
+
+        rc.writeResultToFile(resultFile);
+        List<String> results = Files.readAllLines(resultFile);
+        assertTrue(results.contains("9 Singer 6"));
+
+        assertEquals("Winner: Actors_From_Shadow", results.get(results.size() - 1));
+    }
 }
