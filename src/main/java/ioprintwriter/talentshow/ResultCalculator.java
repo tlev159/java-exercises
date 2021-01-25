@@ -15,11 +15,12 @@ public class ResultCalculator {
   public void readTalents(Path file) {
     try (BufferedReader reader = Files.newBufferedReader(file)) {
       String line;
-      while ((line = reader.readLine()) != null);
-      String[] pr = line.split(" ");
-      Production p = new Production(Integer.parseInt(pr[0]), pr[1]);
-      productions.add(p);
+      while ((line = reader.readLine()) != null) {
+        String[] pr = line.split(" ");
+        Production p = new Production(Integer.parseInt(pr[0]), pr[1]);
+        productions.add(p);
 //        productions.add(new Production(Integer.parseInt(pr[0]), pr[1]));
+      }
     } catch (IOException ioe) {
       throw new IllegalStateException("Can not read file", ioe);
     }
