@@ -10,17 +10,6 @@ import java.util.List;
 public class Airport {
   private List<Fly> flies = new ArrayList<>();
 
-  public static void main(String[] args) {
-    Airport airport = new Airport();
-    airport.readFiles();
-    //System.out.println(airport.flies);
-    //System.out.println(airport.witchIsMore());
-    //System.out.println(airport.searchFlyAtRegNumber("HM0332"));
-    //System.out.println(airport.searchFlyAtRegNumber("AB1234"));
-    //System.out.println(airport.searchFliesFromToCity("Budapest", "Arrival"));
-    //System.out.println(airport.searchEarliestFly());
-  }
-
   public List<Fly> getFlies() {
     return new ArrayList<>(flies);
   }
@@ -77,22 +66,22 @@ public class Airport {
   }
 
   public Fly searchEarliestFly() {
-    Fly earliestFly = firstArrival();
+    Fly earliestFly = firstDeparture();
 
     for (Fly fly : flies) {
-      if (fly.getStartsEnd().equals("Arrival") && fly.getTime().isBefore(earliestFly.getTime())) {
+      if (fly.getStartsEnd().equals("Departure") && fly.getTime().isBefore(earliestFly.getTime())) {
         earliestFly = fly;
       }
     }
     return earliestFly;
   }
 
-  private Fly firstArrival() {
+  private Fly firstDeparture() {
     for (Fly fly : flies) {
-      if (fly.getStartsEnd().equals("Arrival")) {
+      if (fly.getStartsEnd().equals("Departure")) {
         return fly;
       }
     }
-    throw new IllegalStateException("No Arrival");
+    throw new IllegalStateException("No Departure");
   }
 }
