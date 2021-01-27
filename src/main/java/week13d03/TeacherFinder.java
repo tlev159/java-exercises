@@ -18,16 +18,21 @@ public class TeacherFinder {
     String path = "src" + SEPARATOR + "main" + SEPARATOR + "resources" + SEPARATOR + "week13d03" + SEPARATOR + pathName;
     Path file = Path.of(path);
     try (BufferedReader reader = Files.newBufferedReader(file)) {
-      String line;
-      while ((line = reader.readLine()) != null) {
-        teachersPlans.add(new TeachersPlan(
-                line,
-                reader.readLine(), reader.readLine(), Integer.parseInt(reader.readLine())
-        ));
+
+      String[] block = new String[4];
+      while ((block[0] = reader.readLine()) != null) {
+        teachersPlans.add(processBlock(reader, block));
       }
     } catch (IOException ioe) {
-      throw new IllegalArgumentException("Can not read file!");
+      throw new IllegalArgumentException("Can not read file!", ioe);
     }
+  }
+
+  private TeachersPlan processBlock(BufferedReader br, String[] block) throws IOException {
+    for (int i = 1; i < 4; i++) {
+      block[i] = br.readLine();
+    }
+    return new TeachersPlan(block[0], block[1], block[2], Integer.parseInt(block[3]));
   }
 
   public int findClassNumberOfTeacher(String teacher) {
