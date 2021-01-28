@@ -10,8 +10,8 @@ public class TemplateMerger {
 
   public String merge(Path file, List<Employee> employees) {
     StringBuilder sb = new StringBuilder();
-    try {
-      String pattern = Files.readString(file);
+    try (BufferedReader reader = Files.newBufferedReader(file)){
+      String pattern = reader.readLine();
       for (Employee employee:employees) {
         String editedStringLine = changeStrings(pattern, employee);
         sb.append(editedStringLine + "\n");
@@ -23,9 +23,8 @@ public class TemplateMerger {
   }
 
   private String changeStrings(String pattern, Employee employee) {
+    String name = employee.getName();
     String year = Integer.toString(employee.getYearOfBirth());
-    pattern.replace("{nev}", employee.getName());
-    pattern.replace("{ev}", year);
-    return pattern;
+    return pattern.replace("{nev}", name).replace("{ev}", year);
   }
 }
