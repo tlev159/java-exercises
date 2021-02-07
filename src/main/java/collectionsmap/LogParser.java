@@ -28,6 +28,7 @@ public class LogParser {
         LocalDate date = stringToDate(splittedLog[DATE_POSITION]);
         String login = splittedLog[LOGIN_POSITION];
         Entry entry = new Entry(ip, date, login);
+        System.out.println(entry.toString());
         if (!result.containsKey(entry.getIpAddress())) {
           result.put(entry.getIpAddress(), new ArrayList<>());
         }
