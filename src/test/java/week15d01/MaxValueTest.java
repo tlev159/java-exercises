@@ -24,9 +24,11 @@ public class MaxValueTest {
 
     MaxValue mm = new MaxValue();
 
-    assertEquals(2.6, mm.MaxOfValues(coordinates));
+    Map.Entry<Double, Double> max = mm.maxOfValues(coordinates);
 
-    assertEquals(8.3, mm.MinOfValues(coordinates));
+    assertEquals(2.6, max.getKey());
+    assertEquals(16.2, max.getValue());
+
   }
 
 }

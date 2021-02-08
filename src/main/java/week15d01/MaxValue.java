@@ -4,26 +4,18 @@ import java.util.*;
 
 public class MaxValue {
 
-  public double MaxOfValues(Map<Double, Double> coordinates) {
-    Set<Double> values = new TreeSet<>(coordinates.values());
-    double maxValue = Collections.max(values);
-    double keyOfMaxValue = getKey(coordinates, maxValue);
-    return keyOfMaxValue;
-  }
+  public Map.Entry<Double, Double> maxOfValues(Map<Double, Double> coordinates) {
+    if (coordinates.isEmpty() || coordinates.containsValue(Double.MIN_VALUE)) {
+      throw new IllegalArgumentException("Wrong parameters!");
+    }
+    Map.Entry<Double, Double> maxValue = null;
 
-  public double MinOfValues(Map<Double, Double> coordinates) {
-    Set<Double> values = new TreeSet<>(coordinates.values());
-    double minValue = Collections.min(values);
-    double keyOfMinValue = getKey(coordinates, minValue);
-    return keyOfMinValue;
-  }
-
-  private double getKey(Map<Double, Double> map, double value) {
-    for (Map.Entry<Double, Double> entry : map.entrySet()) {
-      if (entry.getValue().equals(value)) {
-        return entry.getKey();
+    for (Map.Entry<Double, Double> entry : coordinates.entrySet()) {
+      if (maxValue == null || maxValue.getValue() < entry.getValue()) {
+        maxValue = entry;
       }
     }
-    throw new IllegalArgumentException("No key with this value!");
+    return maxValue;
   }
+
 }
