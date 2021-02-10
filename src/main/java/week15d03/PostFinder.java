@@ -30,7 +30,7 @@ public class PostFinder {
 
   private boolean proofOfPosts(List<Post> listOfPosts) {
     for (Post post : listOfPosts) {
-      if (post.getContent().isEmpty() || post.getTitle().isEmpty()) {
+      if (post.getContent().isEmpty() || post.getTitle().isEmpty() ) {
         return false;
       }
     }
