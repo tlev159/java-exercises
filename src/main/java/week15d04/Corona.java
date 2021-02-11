@@ -1,23 +1,15 @@
 package week15d04;
 
-public class Corona {
+public class Corona implements Comparable<Corona> {
 
-  private String dateRep;
   private String yearWeek;
   private int casesWeekly;
-  private int deathsWeekly;
   private String country;
 
-  public Corona(String dateRep, String yearWeek, int casesWeekly, int deathsWeekly, String country) {
-    this.dateRep = dateRep;
+  public Corona(String yearWeek, int casesWeekly, String country) {
     this.yearWeek = yearWeek;
     this.casesWeekly = casesWeekly;
-    this.deathsWeekly = deathsWeekly;
     this.country = country;
-  }
-
-  public String getDateRep() {
-    return dateRep;
   }
 
   public String getYearWeek() {
@@ -28,18 +20,21 @@ public class Corona {
     return casesWeekly;
   }
 
-  public int getDeathsWeekly() {
-    return deathsWeekly;
-  }
-
   public String getCountry() {
     return country;
   }
 
   @Override
   public String toString() {
-    return country + ": " +
-            "dateRep='" + dateRep + ", yearWeek='" + yearWeek + ", casesWeekly=" + casesWeekly +
-            ", deathsWeekly=" + deathsWeekly;
+    return "Corona{" +
+            "yearWeek='" + yearWeek + '\'' +
+            ", casesWeekly=" + casesWeekly +
+            ", country='" + country + '\'' +
+            '}';
+  }
+
+  @Override
+  public int compareTo(Corona o) {
+    return o.casesWeekly - this.casesWeekly;
   }
 }
