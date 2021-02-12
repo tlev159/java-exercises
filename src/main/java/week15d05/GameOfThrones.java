@@ -16,28 +16,14 @@ public class GameOfThrones {
     Map<String, Integer> numberOfHouses = new HashMap<>();
     String line;
     while ((line = reader.readLine()) != null) {
-//      System.out.println(line);
-
-      String[] parts = line.split(",");
-      List<String> houses = new ArrayList<>();
-      for (int i = 5; i < 13; i++) {
-        if (!parts[i].isBlank()) {
-          houses.add(parts[i]);
-        }
-      }
-//      System.out.println(houses);
-
-      for (String house : houses) {
-        if (!numberOfHouses.containsKey(house)) {
-          numberOfHouses.put(house, 1);
-        } else {
-          numberOfHouses.put(house, numberOfHouses.get(house) + 1);
-        }
-      }
-//      System.out.println(numberOfHouses);
-
-
+      List<String> houses = addPartsToList(line);
+      countNumberOfHouses(numberOfHouses, houses);
     }
+    String nameOfHouse = selectMaxBattledHouse(numberOfHouses);
+    return nameOfHouse;
+  }
+
+  private String selectMaxBattledHouse(Map<String, Integer> numberOfHouses) {
     int max = Integer.MIN_VALUE;
     String nameOfHouse = null;
 
@@ -47,8 +33,28 @@ public class GameOfThrones {
         nameOfHouse = entry.getKey();
       }
     }
-    System.out.println(nameOfHouse + ": " + max);
     return nameOfHouse;
+  }
+
+  private void countNumberOfHouses(Map<String, Integer> numberOfHouses, List<String> houses) {
+    for (String house : houses) {
+      if (!numberOfHouses.containsKey(house)) {
+        numberOfHouses.put(house, 1);
+      } else {
+        numberOfHouses.put(house, numberOfHouses.get(house) + 1);
+      }
+    }
+  }
+
+  private List<String> addPartsToList(String line) {
+    String[] parts = line.split(",");
+    List<String> houses = new ArrayList<>();
+    for (int i = 5; i < 13; i++) {
+      if (!parts[i].isBlank()) {
+        houses.add(parts[i]);
+      }
+    }
+    return houses;
   }
 
   public static void main(String[] args) {
