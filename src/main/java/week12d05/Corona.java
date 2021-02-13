@@ -10,15 +10,12 @@ public class Corona {
 
   private static final String SEPARATE = FileSystems.getDefault().getSeparator();
 
-  public int findWordInHtml() {
+  public int findWordInHtml(Path file, String word) {
     int result = 0;
-    String fileName = "src" + SEPARATE + "main" + SEPARATE + "resources" + SEPARATE + "week12d05" + SEPARATE + "Index.htm";
-    Path file = Path.of(fileName);
     try (BufferedReader br = Files.newBufferedReader(file)){
       String line;
       while ((line = br.readLine()) != null) {
-        String[] stringLine = line.split(" ");
-        if (line.contains("koronavírus")) {
+        if (line.contains(word)) {
             result++;
           }
         }
@@ -31,6 +28,8 @@ public class Corona {
 
   public static void main(String[] args) {
     Corona c = new Corona();
-    System.out.println(c.findWordInHtml());
+    String fileName = "src" + SEPARATE + "main" + SEPARATE + "resources" + SEPARATE + "week12d05" + SEPARATE + "Index.htm";
+    Path file = Path.of(fileName);
+    System.out.println(c.findWordInHtml(file, "koronavírus"));
   }
 }
