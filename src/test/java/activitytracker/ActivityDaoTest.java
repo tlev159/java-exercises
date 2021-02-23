@@ -55,6 +55,14 @@ class ActivityDaoTest {
   }
 
   @Test
+  public void testById() {
+    long id = activityDao.saveActivity(activity3).getId();
+    String description = activityDao.findActivityById(id).getDesc();
+    assertEquals("Hiking in the town", description);
+
+  }
+
+  @Test
   public void findActivityById() {
     Activity activity = activityDao.findActivityById(1L);
 

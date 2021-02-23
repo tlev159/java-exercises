@@ -16,18 +16,31 @@ public class ActivityDao {
   public Activity saveActivity(Activity activity) {
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt =
-                 conn.prepareStatement("INSERT INTO activities (start_time, activity_desc, activity_type) VALUES (?,?,?)")
+                 conn.prepareStatement("INSERT INTO activities (start_time, activity_desc, activity_type) VALUES (?,?,?)",
+                         Statement.RETURN_GENERATED_KEYS)
     ) {
       stmt.setTimestamp(1, Timestamp.valueOf(activity.getStartTime()));
       stmt.setString(2, activity.getDesc());
       stmt.setString(3, activity.getType().toString());
       stmt.executeUpdate();
+
+      return getIdByStatement(stmt);
     }
     catch (SQLException se) {
       throw new IllegalStateException("Can not insert data!", se);
     }
-    List<Activity> activities = listActivities();
-    return activities.get(listActivities().size() - 1);
+  }
+
+  private Activity getIdByStatement(PreparedStatement stmt) {
+    try (ResultSet rs = stmt.getGeneratedKeys()){
+      if (rs.next()) {
+        return findActivityById(rs.getLong(1));
+      }
+      throw new IllegalStateException("Can not get id!");
+    }
+    catch (SQLException se) {
+      throw new IllegalStateException("Can not get id!", se);
+    }
   }
 
   public Activity findActivityById(long id) {
