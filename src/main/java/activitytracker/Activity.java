@@ -4,24 +4,30 @@ import java.time.LocalDateTime;
 
 public class Activity {
 
-  private int id;
-  private LocalDateTime startTine;
+  private long id;
+  private LocalDateTime startTime;
   private String desc;
   private ActivityType type;
 
-  public Activity(int id, LocalDateTime startTine, String desc, ActivityType type) {
+  public Activity(long id, LocalDateTime startTime, String desc, ActivityType type) {
     this.id = id;
-    this.startTine = startTine;
+    this.startTime = startTime;
     this.desc = desc;
     this.type = type;
   }
 
-  public int getId() {
+  public Activity(LocalDateTime startTime, String desc, ActivityType type) {
+    this.startTime = startTime;
+    this.desc = desc;
+    this.type = type;
+  }
+
+  public long getId() {
     return id;
   }
 
-  public LocalDateTime getStartTine() {
-    return startTine;
+  public LocalDateTime getStartTime() {
+    return startTime;
   }
 
   public String getDesc() {
@@ -30,5 +36,15 @@ public class Activity {
 
   public ActivityType getType() {
     return type;
+  }
+
+  @Override
+  public String toString() {
+    return "Activity{" +
+            "id=" + id +
+            ", startTime=" + startTime +
+            ", desc='" + desc + '\'' +
+            ", type=" + type +
+            '}';
   }
 }

@@ -5,15 +5,12 @@ import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ActivityTrackerMain {
 
   public static void main(String[] args) {
 
-    Activity activity1 = new Activity(1, LocalDateTime.of(2021, 02, 13, 10, 13), "Going to play bascetball", ActivityType.BASKETBALL);
-    Activity activity2 = new Activity(1, LocalDateTime.of(2021, 02, 13, 14, 13), "Biking in the town", ActivityType.BIKING);
-    Activity activity3 = new Activity(1, LocalDateTime.of(2021, 02, 16, 11, 13), "Hiking in the town", ActivityType.HIKING);
-    Activity activity4 = new Activity(1, LocalDateTime.of(2021, 02, 20, 16, 13), "Running in the wood", ActivityType.RUNNING);
 
     MariaDbDataSource dataSource;
     try {
@@ -31,9 +28,15 @@ public class ActivityTrackerMain {
     flyway.clean();
     flyway.migrate();
 
-    ActivityTrackerDao trackerDao = new ActivityTrackerDao(dataSource);
-    trackerDao.createActivity(activity1);
+    ActivityDao trackerDao = new ActivityDao(dataSource);
 
+
+    System.out.println(trackerDao.findActivityById(2L).toString());
+
+    List<Activity> activities = trackerDao.listActivities();
+    for (Activity activity : activities) {
+      System.out.println(activity.toString());
+    }
 
   }
 }
