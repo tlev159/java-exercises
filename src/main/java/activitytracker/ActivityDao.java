@@ -2,6 +2,9 @@ package activitytracker;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,10 +27,40 @@ public class ActivityDao {
       stmt.setString(3, activity.getType().toString());
       stmt.executeUpdate();
 
+//      try (ResultSet rs = stmt.getGeneratedKeys()) {
+//        if (rs.next()) {
+//          long id = rs.getLong(1);
+//          return new Activity(id, activity.getStartTime(), activity.getDesc(), activity.getType());
+//        }
+//      }
+
       return getIdByStatement(stmt);
     }
     catch (SQLException se) {
       throw new IllegalStateException("Can not insert data!", se);
+    }
+  }
+
+  public List<Activity> selectActivitiesBeforeDate(LocalDate date) {
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps = conn.prepareStatement("SELECT * FROM activities WHERE start_time < ?");
+    ) {
+//      ps.setString(1, date.toString);
+
+      LocalDateTime actualDate = date.atTime(0,0);
+      ps.setTimestamp(1, Timestamp.valueOf(actualDate));
+      return selectActivityPreparedStatement(ps);
+    }
+    catch (SQLException se) {
+      throw new IllegalStateException("Can not connect!", se);
+    }
+  }
+
+  private void isDateBeforGivenDate(LocalDate date, List<Activity> result, List<Activity> temp) {
+    for (Activity activity : temp) {
+      if (activity.getStartTime().isBefore(LocalDateTime.of(date, LocalTime.of(0,0)))) {
+        result.add(activity);
+      }
     }
   }
 
