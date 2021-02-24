@@ -14,11 +14,7 @@ public class CdvCheck {
       sum += div * Integer.parseInt(s);
       div++;
     }
-    if (sum % 11 == cdv) {
-      return true;
-    } else {
-      return false;
-    }
+    return sum % 11 == cdv ? true : false;
   }
 
   private boolean isACorrectNumber(String str) {
