@@ -21,16 +21,10 @@ public class OwlCounter {
   }
 
   public int getNumberOfOwls(String country) {
-    int result = 0;
-    boolean isTown = false;
     for (Map.Entry<String, Integer> temp : owls.entrySet()) {
       if (temp.getKey().equals(country)) {
-        result = temp.getValue();
-        isTown = true;
+        return temp.getValue();
       }
-    }
-    if (isTown) {
-      return result;
     }
     throw new IllegalArgumentException("No country with the name \"" + country + "\" found!");
   }
