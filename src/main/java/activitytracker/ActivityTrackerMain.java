@@ -4,7 +4,6 @@ import org.flywaydb.core.Flyway;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class ActivityTrackerMain {
@@ -32,6 +31,7 @@ public class ActivityTrackerMain {
 
 
     System.out.println(trackerDao.findActivityById(2L).toString());
+    System.out.println(trackerDao.selectByType(ActivityType.BIKING));
 
     List<Activity> activities = trackerDao.listActivities();
     for (Activity activity : activities) {
