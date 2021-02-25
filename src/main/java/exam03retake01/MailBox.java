@@ -48,9 +48,10 @@ public class MailBox {
   }
 
   private void isGivenStringContained(String str, List<Mail> temp, Mail mail) {
-    for (Contact contact: mail.getTo())
-    if (contact.getName().equals(str) || contact.getEmail().equals(str)) {
-      temp.add(mail);
+    for (Contact contact: mail.getTo()) {
+      if (contact.getName().equals(str) || contact.getEmail().equals(str)) {
+        temp.add(mail);
+      }
     }
   }
 
