@@ -10,7 +10,7 @@ public class Activity {
   private LocalDateTime startTime;
   private String desc;
   private ActivityType type;
-  private List<TrackerPoint> trackerPoints = new ArrayList<>();
+  private List<TrackPoint> trackPoints = new ArrayList<>();
 
   public Activity(long id, LocalDateTime startTime, String desc, ActivityType type) {
     this.id = id;
@@ -23,6 +23,10 @@ public class Activity {
     this.startTime = startTime;
     this.desc = desc;
     this.type = type;
+  }
+
+  public void addTrackPoint(TrackPoint trackPoint) {
+    trackPoints.add(trackPoint);
   }
 
   public long getId() {
@@ -39,6 +43,10 @@ public class Activity {
 
   public ActivityType getType() {
     return type;
+  }
+
+  public List<TrackPoint> getTrackerPoints() {
+    return trackPoints;
   }
 
   @Override

@@ -16,10 +16,16 @@ class ActivityDaoTest {
 
   ActivityDao activityDao;
 
+
   Activity activity1 = new Activity(LocalDateTime.of(2021, 02, 13, 10, 13), "Going to play basketball", ActivityType.BASKETBALL);
   Activity activity2 = new Activity(LocalDateTime.of(2021, 02, 13, 14, 13), "Biking in the town", ActivityType.BIKING);
   Activity activity3 = new Activity(LocalDateTime.of(2021, 02, 16, 11, 13), "Hiking in the town", ActivityType.HIKING);
   Activity activity4 = new Activity(LocalDateTime.of(2021, 02, 20, 16, 13), "Running in the wood", ActivityType.RUNNING);
+
+  TrackPoint tp1 = new TrackPoint(LocalDate.of(2021,02,13), 47.15, 28.35);
+  TrackPoint tp2 = new TrackPoint(LocalDate.of(2021,03,15), 48.15, 28.45);
+  TrackPoint tp3 = new TrackPoint(LocalDate.of(2021,04,17), 49.15, 28.55);
+  TrackPoint tp4 = new TrackPoint(LocalDate.of(2021,05,19), 47.55, 28.65);
 
   @BeforeEach
   public void init() {

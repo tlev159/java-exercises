@@ -2,21 +2,22 @@ package activitytracker;
 
 import java.time.LocalDate;
 
-public class TrackerPoint {
+public class TrackPoint {
 
   private long id;
   private LocalDate time;
   private double lat;
   private double lon;
 
-  public TrackerPoint(long id, LocalDate time, double lat, double lon) {
+  public TrackPoint(long id, LocalDate time, double lat, double lon) {
+    if (lat < 90 || lat > 90)
     this.id = id;
     this.time = time;
     this.lat = lat;
     this.lon = lon;
   }
 
-  public TrackerPoint(LocalDate time, double lat, double lon) {
+  public TrackPoint(LocalDate time, double lat, double lon) {
     this.time = time;
     this.lat = lat;
     this.lon = lon;
@@ -40,7 +41,7 @@ public class TrackerPoint {
 
   @Override
   public String toString() {
-    return "TrackerPoint{" +
+    return "TrackPoint{" +
             "id=" + id +
             ", time=" + time +
             ", lat=" + lat +

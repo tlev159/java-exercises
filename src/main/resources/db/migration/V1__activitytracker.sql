@@ -9,5 +9,5 @@ CREATE TABLE track_point (
 	time TIMESTAMP,
 	lat DECIMAL(8,4),
 	lon DECIMAL(8,4),
-	activity_id BIGINT NOT NULL,
-	FOREIGN KEY fk_id (activity_id) REFERENCES activities(id) ON UPDATE SET DEFAULT);
+	activityId BIGINT NOT NULL,
+	FOREIGN KEY (activityId) REFERENCES activities(id));

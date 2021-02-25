@@ -18,15 +18,20 @@ public class ActivityDao {
 
   public Activity saveActivity(Activity activity) {
     try (Connection conn = dataSource.getConnection();
-         PreparedStatement stmt =
+         PreparedStatement stmt1 =
                  conn.prepareStatement("INSERT INTO activities (start_time, activity_desc, activity_type) VALUES (?,?,?)",
-                         Statement.RETURN_GENERATED_KEYS)
+                         Statement.RETURN_GENERATED_KEYS);
+         PreparedStatement stmt2 =
+                 conn.prepareStatement("INSERT INTO track_point (time, lat, lon, activity_id) VALUES (?,?,?,?)",
+                         Statement.RETURN_GENERATED_KEYS);
     ) {
-      stmt.setTimestamp(1, Timestamp.valueOf(activity.getStartTime()));
-      stmt.setString(2, activity.getDesc());
-      stmt.setString(3, activity.getType().toString());
-      stmt.executeUpdate();
+      stmt1.setTimestamp(1, Timestamp.valueOf(activity.getStartTime()));
+      stmt1.setString(2, activity.getDesc());
+      stmt1.setString(3, activity.getType().toString());
+      stmt1.executeUpdate();
+      Activity temp = getIdByStatement(stmt1);
 
+      insertActivityTrackPoints(activity.getTrackerPoints(), temp.getId());
 //      try (ResultSet rs = stmt.getGeneratedKeys()) {
 //        if (rs.next()) {
 //          long id = rs.getLong(1);
@@ -34,11 +39,49 @@ public class ActivityDao {
 //        }
 //      }
 
-      return getIdByStatement(stmt);
+      return temp;
     }
     catch (SQLException se) {
       throw new IllegalStateException("Can not insert data!", se);
     }
+  }
+
+  private void insertActivityTrackPoints(List<TrackPoint> trackPoints, long activityId) {
+    try (Connection conn = dataSource.getConnection()) {
+      conn.setAutoCommit(false);
+
+      try (PreparedStatement ps = conn.prepareStatement("INSERT INTO track_point (time, lat, lon, activity_id) VALUES (?,?,?,?)",
+              Statement.RETURN_GENERATED_KEYS)
+      ) {
+        for (TrackPoint trackPoint : trackPoints) {
+          if (!isValidLatLon(trackPoint.getLat(), trackPoint.getLon())) {
+            throw new IllegalStateException("Invalid track point!");
+          }
+          ps.setDate(1, Date.valueOf(trackPoint.getTime()));
+          ps.setDouble(2, trackPoint.getLat());
+          ps.setDouble(3, trackPoint.getLon());
+          ps.setLong(4, activityId);
+          ps.executeUpdate();
+        }
+        conn.commit();
+
+      } catch (SQLException se) {
+        conn.rollback();
+        throw new IllegalStateException("Can not insert trackpoint", se);
+      }
+    } catch (SQLException se) {
+      throw new IllegalStateException("Can not connect!", se);
+    }
+  }
+
+  private boolean isValidLatLon(double lat, double lon) {
+    if (lat < -90 || lat > 90) {
+      return false;
+    }
+    if (lon < -180 || lon > 180) {
+      return false;
+    }
+    return true;
   }
 
   public List<Activity> selectActivitiesBeforeDate(LocalDate date) {
