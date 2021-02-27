@@ -12,16 +12,17 @@ public class CoronaVaccinationMain {
 
     CoronaVaccinationMain cvm = new CoronaVaccinationMain();
 
-    MariaDbDataSource dataSource;
+    MariaDbDataSource dataSource = new MariaDbDataSource();
 
     try {
-      dataSource = new MariaDbDataSource();
-      dataSource.setUrl("jdbc:mariadb://localhost:3306/corona:useUniset=true");
+      dataSource.setUrl("jdbc:mariadb://localhost:3306/corona?useUnicode=true");
       dataSource.setUser("coronavaccinadmin");
       dataSource.setPassword("coronavaccin");
     } catch (SQLException se) {
       throw new IllegalStateException("Can not connect to database!", se);
     }
+
+    CoronaDao coronaDao = new CoronaDao(dataSource);
 
     Scanner scanner = new Scanner(System.in);
     int pushedMenu = 0;
@@ -42,7 +43,7 @@ public class CoronaVaccinationMain {
       switch (pushedMenu) {
         case 1:
           System.out.println("A regisztrációt választotta!");
-          System.out.println(cvm.registrate(dataSource));
+          System.out.println(cvm.registrate(coronaDao));
           break;
         case 2:
           System.out.println("A tömeges regisztrációt választotta fájlbeolvasással!");
@@ -74,13 +75,14 @@ public class CoronaVaccinationMain {
     }
   }
 
-  private Citizens registrate(MariaDbDataSource dataSource) {
+  private Citizens registrate(CoronaDao coronaDao) {
     Scanner scanner = new Scanner(System.in);
     System.out.println("Kérem, adja meg az oltásra regisztáló adatait!");
     System.out.println("Teljes neve: ");
     String fullName = scanner.nextLine();
     System.out.println("Lakhelyének irányítószáma:");
     int zip = scanner.nextInt();
+    System.out.println("Város: " + coronaDao.findTownWithTheGivenZip(zip));
     scanner.nextLine();
     System.out.println("Az oltásra regisztáló életkora:");
     int age = scanner.nextInt();
@@ -93,7 +95,7 @@ public class CoronaVaccinationMain {
     String taj = scanner.nextLine();;
 
     Citizens citizens = new Citizens(fullName, zip, age, email1, email2, taj);
-
+//    coronaDao.addCitizenToDatabase(citizens);
     return citizens;
   }
 }
