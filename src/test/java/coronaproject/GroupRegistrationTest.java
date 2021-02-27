@@ -31,7 +31,12 @@ class GroupRegistrationTest {
   public void testFillRegistrationDataFromFile() {
 
       GroupRegistration gr = new GroupRegistration();
-      gr.readRegistrationDataFromFile(reader);
+      try {
+        gr.readRegistrationDataFromFile(reader);
+
+      } catch (IOException ioe) {
+        throw new IllegalStateException("A fájl nem olvasható!", ioe);
+      }
 
       List<Citizens> citizens = gr.getCitizens();
       System.out.println(Arrays.asList(citizens));

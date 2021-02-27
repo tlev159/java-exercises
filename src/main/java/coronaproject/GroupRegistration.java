@@ -11,10 +11,8 @@ public class GroupRegistration {
 
   private List<Citizens> citizens = new ArrayList<>();
 
-
-  public void readRegistrationDataFromFile(BufferedReader reader) {
+  public List<Citizens> readRegistrationDataFromFile(BufferedReader reader) throws IOException {
     String line;
-    try {
       reader.readLine();
       while ((line = reader.readLine()) != null) {
         String[] temp = line.split(SEPARATE);
@@ -23,11 +21,9 @@ public class GroupRegistration {
         int age = Integer.parseInt(temp[2]);
         String email = temp[3];
         String taj = temp[4];
-        citizens.add(new Citizens(fullName, zip, age, email, email, taj));
+        citizens.add(new Citizens(fullName, zip, age, email, taj));
       }
-    } catch (IOException ioe) {
-      throw new IllegalArgumentException("Can not read the file!", ioe);
-    }
+    return citizens;
   }
 
   public List<Citizens> getCitizens() {
