@@ -3,10 +3,18 @@ package coronaproject;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Array;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -58,17 +66,17 @@ public class CoronaVaccinationMain {
 
         case 3:
           System.out.println("A 'generálás' menüt választotta!");
-//        cvm.generating(datasource);
+        cvm.generating(coronaDao);
           break;
 
         case 4:
           System.out.println("Az 'oltás' menüt választotta!");
-//        cvm.giveVaccin(datasource);
+//        cvm.giveVaccin(coronaDao);
           break;
 
         case 5:
           System.out.println("Az 'oltás meghiúsulása' menüt' választotta!");
-//        cvm.notGivenVaccin(datasource);
+//        cvm.notGivenVaccin(coronaDao);
           break;
 
         case 6:
@@ -130,6 +138,43 @@ public class CoronaVaccinationMain {
       coronaDao.insertGroupOfCitizens(citizens);
     } catch (IOException ioe) {
       throw new IllegalArgumentException("Can not read file", ioe);
+    }
+  }
+
+  public void generating(CoronaDao coronaDao) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Kérem adja meg a listázandó település irányítószámát!");
+    int postalCode = Integer.parseInt(scanner.nextLine());
+    System.out.println("Kérem adja meg, hogy milyen néven mentsem el a generált fájlt!");
+    String fileName = scanner.nextLine();
+    List<Citizens> citizensInGivenTown = coronaDao.findCitizensWithGivenPostalCode(postalCode);
+    generateFile(fileName, citizensInGivenTown);
+//    System.out.println(Arrays.asList(citizensInGivenTown));
+
+  }
+
+  private void generateFile(String fileName, List<Citizens> citizens) {
+    List<Citizens> temp = new ArrayList<>();
+    LocalDateTime firstTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8,0));
+    for (Citizens tempCitizen : citizens) {
+      tempCitizen.setLastVaccination(firstTime);
+      temp.add(tempCitizen);
+      firstTime = firstTime.plusMinutes(30);
+    }
+//    System.out.println(Arrays.asList(temp));
+    try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(Path.of(fileName)))) {
+      writer.println("Időpont;Név;Irányítószám;Életkor;E-mail cím;TAJ szám");
+      for (Citizens tmp : temp) {
+        writer.print(tmp.getLastVaccination().getHour() + ":");
+        writer.printf("%02d", tmp.getLastVaccination().getMinute());
+        writer.print(";" + tmp.getFullName() + ";");
+        writer.print(tmp.getZip() + ";");
+        writer.print(tmp.getAge() + ";");
+        writer.print(tmp.getEmail() + ";");
+        writer.print(tmp.getTaj() + "\n");
+      }
+    } catch (IOException ioe) {
+      throw new IllegalStateException("Can not write file!", ioe);
     }
   }
 
