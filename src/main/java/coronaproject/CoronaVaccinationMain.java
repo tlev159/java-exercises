@@ -24,7 +24,7 @@ public class CoronaVaccinationMain {
   public static void main(String[] args) {
 
     CoronaVaccinationMain cvm = new CoronaVaccinationMain();
-
+    CitizenValidation citizenValidation = new CitizenValidation();
     MariaDbDataSource dataSource = new MariaDbDataSource();
 
     try {
@@ -89,25 +89,29 @@ public class CoronaVaccinationMain {
   }
 
   private Citizens registrate(CoronaDao coronaDao) {
+    CitizenValidation cv = new CitizenValidation();
     Scanner scanner = new Scanner(System.in);
     System.out.println("Kérem, adja meg az oltásra regisztáló adatait!");
     System.out.println("Teljes neve: ");
     String fullName = scanner.nextLine();
-    if (fullName == null || fullName.isEmpty()) {
-      throw new IllegalArgumentException("A név nem lehet null vagy üres!");
-    }
+    cv.isValidCitizenName(fullName);
+//    if (fullName == null || fullName.isEmpty()) {
+//      throw new IllegalArgumentException("A név nem lehet null vagy üres!");
+//    }
     System.out.println("Lakhelyének irányítószáma:");
     int zip = Integer.parseInt(scanner.nextLine());
     String city = coronaDao.findTownWithTheGivenZip(zip);
+    cv.isValidPostcode(zip);
     if (city.isEmpty()) {
       throw new IllegalArgumentException("Nincs ilyen irányítószámmal település!");
     }
     System.out.println("Város: " + coronaDao.findTownWithTheGivenZip(zip));
     System.out.println("Az oltásra regisztáló életkora:");
     int age = Integer.parseInt(scanner.nextLine());
-    if (age < 10 || age > 150) {
-      throw new IllegalArgumentException("Az életkor 10 és 150 között lehet!");
-    }
+    cv.isValidAge(age);
+//    if (age < 10 || age > 150) {
+//      throw new IllegalArgumentException("Az életkor 10 és 150 között lehet!");
+//    }
     System.out.println("Az oltásra regisztáló e-mail címe:");
     String email1 = scanner.nextLine();
     if (email1 == null || email1.length() < 4 || !email1.contains("@")) {
@@ -123,6 +127,7 @@ public class CoronaVaccinationMain {
     if (coronaDao.searchForExistingTaj(taj) != null) {
       throw new IllegalArgumentException("Már van ilyen TAJ-számú regisztáció!");
     }
+    cv.isTajValid(taj);
 
     Citizens citizens = new Citizens(fullName, zip, age, email1, email2, taj);
     coronaDao.addCitizenToDatabase(citizens);
