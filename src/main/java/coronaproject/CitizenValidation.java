@@ -60,4 +60,10 @@ public class CitizenValidation {
     return (sum % 10 == cvd) ? true:false;
   }
 
+  protected void isTajExists(CoronaDao coronaDao, String taj) {
+    if (coronaDao.searchForExistingTaj(taj) != null) {
+      throw new IllegalArgumentException("Már van ilyen TAJ-számú regisztáció!");
+    }
+  }
+
 }
