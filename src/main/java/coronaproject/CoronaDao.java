@@ -4,6 +4,7 @@ import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.*;
 import java.text.Collator;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +44,7 @@ public class CoronaDao {
       conn.setAutoCommit(false);
 
       try (PreparedStatement ps = conn.prepareStatement("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
-                   Statement.RETURN_GENERATED_KEYS)
+              Statement.RETURN_GENERATED_KEYS)
       ) {
         for (Citizens citizen : citizens) {
           ps.setString(1, citizen.getFullName());
@@ -68,6 +69,10 @@ public class CoronaDao {
     }
   }
 
+  public void vaccination(LocalDate date, String taj, VaccinType type) {
+
+  }
+
   public List<Citizens> findCitizensWithGivenPostalCode(int postalCode) {
     List<Citizens> temp = new ArrayList<>();
     try (Connection conn = dataSource.getConnection();
@@ -78,7 +83,7 @@ public class CoronaDao {
 
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
-          LocalDateTime nullTime = LocalDateTime.of(0,1,1,0,0);
+          LocalDateTime nullTime = LocalDateTime.of(0, 1, 1, 0, 0);
           if (rs.getTimestamp("last_vaccination") != null && rs.getTimestamp("last_vaccination").toLocalDateTime() != nullTime) {
             Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), nullTime);
             temp.add(citizen);
@@ -122,8 +127,8 @@ public class CoronaDao {
     return result;
   }
 
-  public String searchForExistingTaj(String taj) {
-    String result = null;
+  public Citizens searchForExistingTaj(String taj) {
+    Citizens temp = null;
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt = conn.prepareStatement("SELECT * FROM citizens WHERE taj = ?");
     ) {
@@ -131,9 +136,20 @@ public class CoronaDao {
 
       try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
-          result = rs.getString("taj");
+          long id = rs.getLong("citizen_id");
+          String name = rs.getString("citizen_name");
+          int zip = rs.getInt("zip");
+          int age = rs.getInt("age");
+          String email = rs.getString("email");
+          long numberOfVaccination = rs.getLong("number_of_vaccination");
+          temp = new Citizens(id, name, zip, age, email, taj);
+          temp.setNumberOfVaccination(numberOfVaccination);
+          if (rs.getTimestamp("last_vaccination") != null) {
+            System.out.println("last: " + rs.getTimestamp("last_vaccination").toLocalDateTime());
+            temp.setLastVaccination(rs.getTimestamp("last_vaccination").toLocalDateTime());
+          }
         }
-        return result;
+        return temp;
       } catch (SQLException se) {
         throw new IllegalStateException("Can not find town!", se);
       }
@@ -141,5 +157,34 @@ public class CoronaDao {
       throw new IllegalStateException("Can not connect to database!", se);
     }
   }
+
+  public Citizens searchCitizenAndVaccinationByTaj(String taj) {
+    Citizens temp = null;
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM vaccinations v JOIN citizens c WHERE c.citizen_id = v.citizen_id AND c.citizen_id = ?");
+    ) {
+
+      temp = searchForExistingTaj(taj);
+      stmt.setLong(1, temp.getId());
+
+      try (ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+          LocalDateTime date = rs.getTimestamp("vaccination_date").toLocalDateTime();
+          String status = rs.getString("status");
+          String note = rs.getString("note");
+//          temp.setNumberOfVaccination(temp.getNumberOfVaccination() + 1);
+          temp.setLastVaccination(date);
+          VaccinType type = VaccinType.valueOf(rs.getString("vaccination_type"));
+          temp.addVaccination(new Vaccinations(date, status, note, type));
+        }
+        return temp;
+      } catch (SQLException se) {
+        throw new IllegalStateException("Can not find town!", se);
+      }
+    } catch (SQLException se) {
+      throw new IllegalStateException("Can not connect to database!", se);
+    }
+  }
+
 
 }

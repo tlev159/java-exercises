@@ -100,13 +100,25 @@ public class CoronaVaccinationMain {
     System.out.println("Kérem adja meg a TAJ számot!");
     String taj = scanner.nextLine();
     citizenValidation.isTajValid(taj);
-    System.out.println("Kérem adja meg az oltás dátumát (éééé-hh-nn formátumban)!");
-    LocalDate vaccinDate = LocalDate.parse(scanner.nextLine());
-    System.out.println(vaccinDate);
-    System.out.println("(1. Pfizer; 2. AstraZeneca; 3. Moderna; 4. Sputnik V; 5. Sinopharm)");
-    System.out.println("Kérem adja meg a vakcina sorszámát!");
-    VaccinType vaccin = witchVaccin(Integer.parseInt(scanner.nextLine()));
-    System.out.println("A(z) " + vaccin.toString() + " vakcinát választotta!");
+    Citizens citizens = coronaDao.searchCitizenAndVaccinationByTaj(taj);
+    if (citizens != null && citizens.getNumberOfVaccination() == 2){
+    System.out.println("Ezzel a TAJ számmal a beteg már megkapta a második oltást is!");
+
+    } else if (citizens != null && citizens.getNumberOfVaccination() == 1 && !citizens.getLastVaccination().plusDays(15).isAfter(LocalDateTime.now())) {
+      System.out.println("Az első oltás időpontja: " + citizens.getLastVaccination() + ", az oltás fajtája: " + citizens.getVaccinations().get(0).getVaccinType() + " volt.");
+      System.out.println("Mivel az első oltástól számítva még nem telt el 15 nap, így a második oltás még nem adható be!");
+
+    } else if (citizens != null || citizens.getNumberOfVaccination() == 1 && citizens.getLastVaccination().plusDays(15).isBefore(LocalDateTime.now())) {
+      System.out.println("Az első oltás időpontja: " + citizens.getLastVaccination() + ", az oltás fajtája: " + citizens.getVaccinations().get(0).getVaccinType() + " volt.");
+      System.out.println("Kérem adja meg az oltás dátumát (éééé-hh-nn formátumban)!");
+      LocalDate vaccinDate = LocalDate.parse(scanner.nextLine());
+      System.out.println(vaccinDate);
+      System.out.println("(1. Pfizer; 2. AstraZeneca; 3. Moderna; 4. Sputnik V; 5. Sinopharm)");
+      System.out.println("Kérem adja meg a vakcina sorszámát!");
+      VaccinType vaccin = witchVaccin(Integer.parseInt(scanner.nextLine()));
+      System.out.println("A(z) " + vaccin.toString() + " vakcinát választotta!");
+      coronaDao.vaccination(vaccinDate, taj, vaccin);
+    }
 
   }
 

@@ -1,6 +1,8 @@
 package coronaproject;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Citizens {
 
@@ -12,6 +14,7 @@ public class Citizens {
   private String taj;
   private long numberOfVaccination;
   private LocalDateTime lastVaccination;
+  private List<Vaccinations> vaccinations = new ArrayList<>();
 
   public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination, LocalDateTime lastVaccination) {
     isCorrectCitizen(fullName, zip, age, email, email, taj);
@@ -50,6 +53,10 @@ public class Citizens {
     this.age = age;
     this.email = email;
     this.taj = taj;
+  }
+
+  public void addVaccination(Vaccinations vaccinations) {
+    this.vaccinations.add(vaccinations);
   }
 
   private void isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
@@ -99,6 +106,10 @@ public class Citizens {
 
   public void setLastVaccination(LocalDateTime lastVaccination) {
     this.lastVaccination = lastVaccination;
+  }
+
+  public List<Vaccinations> getVaccinations() {
+    return vaccinations;
   }
 
   @Override

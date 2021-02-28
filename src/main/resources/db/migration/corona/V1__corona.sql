@@ -8,18 +8,18 @@ CREATE TABLE cities (
 	);
 
 CREATE TABLE citizens (
-	citizen_id BIGINT NOT NULL PRIMARY KEY,
+	citizen_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	citizen_name VARCHAR(200) NOT NULL,
-	zip CHAR(2) NOT NULL,
+	zip BIGINT(5) NOT NULL,
 	age BIGINT NOT NULL,
 	email VARCHAR(200),
 	taj VARCHAR(10),
-	number_of_vaccination BIGINT,
+	number_of_vaccination BIGINT DEFAULT '0',
 	last_vaccination DATETIME
 );
 
 CREATE TABLE vaccinations (
-	vaccination_id BIGINT NOT NULL PRIMARY KEY,
+	vaccination_id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	citizen_id BIGINT NOT NULL,
 	vaccination_date DATETIME NOT NULL,
 	`status` VARCHAR(10),
