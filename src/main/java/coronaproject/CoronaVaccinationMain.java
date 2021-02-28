@@ -20,11 +20,16 @@ import java.util.Scanner;
 
 public class CoronaVaccinationMain {
 
+  private CitizenValidation citizenValidation;
+
+  public void setCitizenValidation(CitizenValidation citizenValidation) {
+    this.citizenValidation = citizenValidation;
+  }
 
   public static void main(String[] args) {
 
     CoronaVaccinationMain cvm = new CoronaVaccinationMain();
-    CitizenValidation citizenValidation = new CitizenValidation();
+    cvm.setCitizenValidation(new CitizenValidation());
     MariaDbDataSource dataSource = new MariaDbDataSource();
 
     try {
@@ -50,8 +55,7 @@ public class CoronaVaccinationMain {
       System.out.println("6. Kilépés");
       System.out.println("Kérem, adja meg a kívánt tevékenység sorszámát!");
 
-      pushedMenu = scanner.nextInt();
-      scanner.nextLine();
+      pushedMenu = Integer.parseInt(scanner.nextLine());
 
       switch (pushedMenu) {
         case 1:
@@ -71,7 +75,7 @@ public class CoronaVaccinationMain {
 
         case 4:
           System.out.println("Az 'oltás' menüt választotta!");
-//        cvm.giveVaccin(coronaDao);
+        cvm.giveVaccin(coronaDao);
           break;
 
         case 5:
@@ -88,30 +92,35 @@ public class CoronaVaccinationMain {
     }
   }
 
+  private void giveVaccin(CoronaDao coronaDao) {
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Kérem adja meg a TAJ számot!");
+    String taj = scanner.nextLine();
+    citizenValidation.isTajValid(taj);
+
+  }
+
   private Citizens registrate(CoronaDao coronaDao) {
-    CitizenValidation cv = new CitizenValidation();
+//    CitizenValidation cv = new CitizenValidation();
     Scanner scanner = new Scanner(System.in);
     System.out.println("Kérem, adja meg az oltásra regisztáló adatait!");
     System.out.println("Teljes neve: ");
     String fullName = scanner.nextLine();
-    cv.isValidCitizenName(fullName);
-//    if (fullName == null || fullName.isEmpty()) {
-//      throw new IllegalArgumentException("A név nem lehet null vagy üres!");
-//    }
+    citizenValidation.isValidCitizenName(fullName);
+//    cv.isValidCitizenName(fullName);
     System.out.println("Lakhelyének irányítószáma:");
     int zip = Integer.parseInt(scanner.nextLine());
     String city = coronaDao.findTownWithTheGivenZip(zip);
-    cv.isValidPostcode(zip);
+    citizenValidation.isValidPostcode(zip);
+//    cv.isValidPostcode(zip);
     if (city.isEmpty()) {
       throw new IllegalArgumentException("Nincs ilyen irányítószámmal település!");
     }
     System.out.println("Város: " + coronaDao.findTownWithTheGivenZip(zip));
     System.out.println("Az oltásra regisztáló életkora:");
     int age = Integer.parseInt(scanner.nextLine());
-    cv.isValidAge(age);
-//    if (age < 10 || age > 150) {
-//      throw new IllegalArgumentException("Az életkor 10 és 150 között lehet!");
-//    }
+    citizenValidation.isValidAge(age);
+//    cv.isValidAge(age);
     System.out.println("Az oltásra regisztáló e-mail címe:");
     String email1 = scanner.nextLine();
     if (email1 == null || email1.length() < 4 || !email1.contains("@")) {
@@ -124,15 +133,15 @@ public class CoronaVaccinationMain {
     }
     System.out.println("Az oltásra regisztáló TAJ-száma:");
     String taj = scanner.nextLine();
-    if (coronaDao.searchForExistingTaj(taj) != null) {
-      throw new IllegalArgumentException("Már van ilyen TAJ-számú regisztáció!");
-    }
-    cv.isTajValid(taj);
+    citizenValidation.isTajExists(coronaDao, taj);
+    citizenValidation.isTajValid(taj);
+//    cv.isTajValid(taj);
 
     Citizens citizens = new Citizens(fullName, zip, age, email1, email2, taj);
     coronaDao.addCitizenToDatabase(citizens);
     return citizens;
   }
+
 
   public void registerFromCvdFile(CoronaDao coronaDao) {
     Scanner scanner = new Scanner(System.in);
