@@ -2,6 +2,7 @@ package coronaproject;
 
 import org.mariadb.jdbc.MariaDbDataSource;
 
+import javax.sound.midi.Soundbank;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -87,8 +88,10 @@ public class CoronaVaccinationMain {
           System.out.println("Köszönöm közreműködését! Viszont látásra!");
 //        byby();
           break;
-      }
 
+        default:
+          System.out.println("Ilyen menüpont nincs! Kérem, a lehetséges menüpontokból válasszon!");
+      }
     }
   }
 
@@ -97,7 +100,18 @@ public class CoronaVaccinationMain {
     System.out.println("Kérem adja meg a TAJ számot!");
     String taj = scanner.nextLine();
     citizenValidation.isTajValid(taj);
+    System.out.println("Kérem adja meg az oltás dátumát (éééé-hh-nn formátumban)!");
+    LocalDate vaccinDate = LocalDate.parse(scanner.nextLine());
+    System.out.println(vaccinDate);
+    System.out.println("(1. Pfizer; 2. AstraZeneca; 3. Moderna; 4. Sputnik V; 5. Sinopharm)");
+    System.out.println("Kérem adja meg a vakcina sorszámát!");
+    VaccinType vaccin = witchVaccin(Integer.parseInt(scanner.nextLine()));
+    System.out.println("A(z) " + vaccin.toString() + " vakcinát választotta!");
 
+  }
+
+  private VaccinType witchVaccin(int vaccin) {
+    return VaccinType.values()[vaccin - 1];
   }
 
   private Citizens registrate(CoronaDao coronaDao) {
