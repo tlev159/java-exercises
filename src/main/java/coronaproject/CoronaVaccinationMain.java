@@ -58,7 +58,8 @@ public class CoronaVaccinationMain {
       switch (pushedMenu) {
         case 1:
           System.out.println(ANSI_PURPLE + "A regisztrációt választotta!" + ANSI_RESET);
-          System.out.println(coronaSystem.registrate(coronaDao));
+          coronaSystem.registrate(coronaDao);
+          System.out.println(ANSI_GREEN + "Sikeresen regisztáció!" + ANSI_RESET + "\n");
           break;
         case 2:
           System.out.println(ANSI_PURPLE + "A tömeges regisztrációt választotta fájlbeolvasással!");

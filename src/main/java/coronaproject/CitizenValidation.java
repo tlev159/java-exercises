@@ -66,4 +66,30 @@ public class CitizenValidation {
     }
   }
 
+  public boolean validationForFileRows(String fullName, int zip, int age, String email, String taj, CoronaDao coronaDao) {
+    if (fullName == null || fullName.isEmpty()) {
+      System.out.println("név");
+      return false;
+    }
+    String city = coronaDao.findTownWithTheGivenZip(zip);
+    if (city.isEmpty()) {
+      System.out.println("város");
+      return false;
+    }
+    if (age < 10 || age > 150) {
+      System.out.println("kor");
+      return false;
+    }
+    if (email == null || email.length() < 4 || !email.contains("@")) {
+      System.out.println("email");
+      return false;
+    }
+    if (!isCorrectTaj(taj) || coronaDao.searchForExistingTaj(taj) != null) {
+      System.out.println("taj" + taj);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
 }

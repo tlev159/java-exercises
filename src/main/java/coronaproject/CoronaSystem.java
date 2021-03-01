@@ -67,7 +67,7 @@ public class CoronaSystem {
     String file = scanner.nextLine();
     try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
       GroupRegistration gr = new GroupRegistration();
-      List<Citizens> citizens = gr.readRegistrationDataFromFile(reader);
+      List<Citizens> citizens = gr.readRegistrationDataFromFile(reader, coronaDao);
       coronaDao.insertGroupOfCitizens(citizens);
       System.out.println(ANSI_GREEN + citizens.size() + " fő regisztrálása megtörtént!" + ANSI_RESET);
     } catch (IOException ioe) {
