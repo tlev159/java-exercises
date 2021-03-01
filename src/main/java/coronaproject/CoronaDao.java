@@ -39,14 +39,17 @@ public class CoronaDao {
     }
   }
 
-  public void insertGroupOfCitizens(List<Citizens> citizens) {
+  public List<Citizens> insertGroupOfCitizens(List<Citizens> citizens) {
     try (Connection conn = dataSource.getConnection()) {
       conn.setAutoCommit(false);
 
       try (PreparedStatement ps = conn.prepareStatement("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
               Statement.RETURN_GENERATED_KEYS)
       ) {
+        List<Integer> failedRows = new ArrayList<>();
+        int i = 1;
         for (Citizens citizen : citizens) {
+
           ps.setString(1, citizen.getFullName());
           ps.setInt(2, citizen.getZip());
           ps.setLong(3, citizen.getAge());
@@ -67,6 +70,7 @@ public class CoronaDao {
     } catch (SQLException se) {
       throw new IllegalStateException("Can not connect to database!", se);
     }
+    return citizens;
   }
 
   public void vaccination(LocalDate date, String taj, VaccinType type) {
@@ -77,9 +81,9 @@ public class CoronaDao {
     List<Citizens> temp = new ArrayList<>();
     try (Connection conn = dataSource.getConnection();
 //         PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE zip = ?")
-         PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE number_of_vaccination < 2 ORDER BY zip, age DESC LIMIT 16;")
+         PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE number_of_vaccination < 2 and zip = ? ORDER BY age DESC, citizen_name LIMIT 16")
     ) {
-//      ps.setLong(1, postalCode);
+      ps.setLong(1, postalCode);
 
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
@@ -92,7 +96,6 @@ public class CoronaDao {
             temp.add(citizen);
           }
         }
-//        Collections.sort(temp, Collator.getInstance(new ));
       }
     } catch (SQLException se) {
       throw new IllegalStateException("Can not connect to database!", se);
@@ -103,7 +106,7 @@ public class CoronaDao {
   public String findTownWithTheGivenZip(int zip) {
     String result = "";
     try (Connection conn = dataSource.getConnection();
-         PreparedStatement stmt = conn.prepareStatement("SELECT city FROM iranyitoszamok WHERE city_id = ?");
+         PreparedStatement stmt = conn.prepareStatement("SELECT city FROM cities WHERE zip = ?");
     ) {
       stmt.setLong(1, zip);
 

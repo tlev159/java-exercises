@@ -2,7 +2,7 @@ package coronaproject;
 
 public class CitizenValidation {
 
-  private void isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
+  protected void isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
     isValidCitizenName(fullName);
     isValidPostcode(zip);
     isValidAge(age);
