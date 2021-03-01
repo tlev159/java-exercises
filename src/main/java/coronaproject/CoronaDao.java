@@ -218,5 +218,19 @@ public class CoronaDao {
     }
   }
 
+  public List<ReportForVaccination> giveRegisteredCitizensBack() {
+    List<ReportForVaccination> report = new ArrayList<>();
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement stmt = conn.prepareStatement("Select zip, number_of_vaccination FROM citizens")
+    ) {
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        report.add(new ReportForVaccination(rs.getInt("zip"), rs.getInt("number_of_vaccination")));
+      }
+    } catch (SQLException se) {
+      throw new IllegalStateException("Can not connect!", se);
+    }
+    return report;
+  }
 
 }

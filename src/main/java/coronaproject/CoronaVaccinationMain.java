@@ -84,7 +84,7 @@ public class CoronaVaccinationMain {
 
         case 6:
           System.out.println(ANSI_PURPLE + "Készítem a riportot az aktuáális adatok alapján!" + ANSI_RESET);
-        coronaSystem.makeReport();
+        coronaSystem.makeReport(coronaDao);
           break;
 
         case 7:

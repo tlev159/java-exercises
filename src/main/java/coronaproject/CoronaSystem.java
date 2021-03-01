@@ -8,9 +8,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class CoronaSystem {
 
@@ -154,8 +152,17 @@ public class CoronaSystem {
     }
   }
 
-  public void makeReport() {
-
+  public void makeReport(CoronaDao coronaDao) {
+    List<ReportForVaccination> temp = coronaDao.giveRegisteredCitizensBack();
+      Map<Integer, Integer> report = new TreeMap<>();
+      for (ReportForVaccination rfv : temp) {
+        if (!report.containsKey(rfv.getZip())) {
+          report.put(rfv.getZip(), rfv.getNumberOfVaccination());
+        } else {
+          report.put(rfv.getZip(), report.get(rfv.getZip()) + rfv.getNumberOfVaccination());
+        }
+    }
+    System.out.println(ANSI_BLUE + report + ANSI_RESET);
   }
 
   private VaccinType witchVaccin(int vaccin) {
