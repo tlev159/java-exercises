@@ -6,6 +6,7 @@ import java.sql.*;
 import java.text.Collator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +75,36 @@ public class CoronaDao {
   }
 
   public void vaccination(LocalDate date, String taj, VaccinType type) {
-
+    Citizens citizen = searchCitizenAndVaccinationByTaj(taj);
+    long citizenId = citizen.getId();
+    long numberOfVaccination = citizen.getNumberOfVaccination();
+    LocalDateTime dateTime;
+    if (citizen.getLastVaccination() != null) {
+      dateTime = citizen.getLastVaccination();
+    } else {
+      dateTime = LocalDateTime.of(date, LocalTime.now());
+    }
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps1 = conn.prepareStatement("UPDATE citizens SET number_of_vaccination = ?, last_vaccination = ? WHERE taj = ?");
+         PreparedStatement ps2 = conn.prepareStatement("INSERT INTO vaccinations (citizen_id, vaccination_date, status, vaccination_type) VALUES (?,?,?,?)")
+    ) {
+      ps1.setString(3, taj);
+      try {
+        ps1.setLong(1, numberOfVaccination + 1);
+        ps1.setTimestamp(2, Timestamp.valueOf(LocalDateTime.of(date, LocalTime.of(16, 0))));
+        ps2.setLong(1, citizenId);
+        ps2.setTimestamp(2, Timestamp.valueOf(dateTime));
+        ps2.setString(3, "GIVEN");
+        ps2.setString(4, type.toString());
+        ps1.executeUpdate();
+        ps2.executeUpdate();
+      } catch (SQLException se) {
+        throw new IllegalStateException("Can not insert datas!", se);
+      }
+      System.out.println("A frissítés sikeres volt!");
+    } catch (SQLException se) {
+      throw new IllegalStateException("Can not connect to database!", se);
+    }
   }
 
   public List<Citizens> findCitizensWithGivenPostalCode(int postalCode) {
@@ -89,7 +119,7 @@ public class CoronaDao {
         while (rs.next()) {
           LocalDateTime nullTime = LocalDateTime.of(0, 1, 1, 0, 0);
           if (rs.getTimestamp("last_vaccination") != null && rs.getTimestamp("last_vaccination").toLocalDateTime() != nullTime) {
-            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), nullTime);
+            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), rs.getTimestamp("last_vaccination").toLocalDateTime());
             temp.add(citizen);
           } else {
             Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), nullTime);
@@ -148,7 +178,6 @@ public class CoronaDao {
           temp = new Citizens(id, name, zip, age, email, taj);
           temp.setNumberOfVaccination(numberOfVaccination);
           if (rs.getTimestamp("last_vaccination") != null) {
-            System.out.println("last: " + rs.getTimestamp("last_vaccination").toLocalDateTime());
             temp.setLastVaccination(rs.getTimestamp("last_vaccination").toLocalDateTime());
           }
         }

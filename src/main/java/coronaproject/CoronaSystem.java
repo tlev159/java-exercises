@@ -61,7 +61,6 @@ public class CoronaSystem {
   }
 
 
-
   public void registerFromCvdFile(CoronaDao coronaDao) {
     Scanner scanner = new Scanner(System.in);
     String file = scanner.nextLine();
@@ -76,7 +75,6 @@ public class CoronaSystem {
   }
 
 
-
   public void generating(CoronaDao coronaDao) {
     Scanner scanner = new Scanner(System.in);
     System.out.println(ANSI_BLUE + "Kérem adja meg a listázandó település irányítószámát!" + ANSI_RESET);
@@ -84,6 +82,7 @@ public class CoronaSystem {
     System.out.println(ANSI_BLUE + "Kérem adja meg, hogy milyen néven mentsem el a generált fájlt!" + ANSI_RESET);
     String fileName = scanner.nextLine();
     List<Citizens> citizensInGivenTown = coronaDao.findCitizensWithGivenPostalCode(postalCode);
+    citizensInGivenTown = selectToVaccinedCitizens(citizensInGivenTown);
     generateFile(fileName, citizensInGivenTown);
 //    System.out.println(Arrays.asList(citizensInGivenTown));
     System.out.println(ANSI_GREEN + "A fájl kiírása megtörtént!" + ANSI_RESET);
@@ -91,7 +90,7 @@ public class CoronaSystem {
 
   private void generateFile(String fileName, List<Citizens> citizens) {
     List<Citizens> temp = new ArrayList<>();
-    LocalDateTime firstTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8,0));
+    LocalDateTime firstTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
     for (Citizens tempCitizen : citizens) {
       tempCitizen.setLastVaccination(firstTime);
       temp.add(tempCitizen);
@@ -112,31 +111,50 @@ public class CoronaSystem {
     }
   }
 
+  private List<Citizens> selectToVaccinedCitizens(List<Citizens> citizens) {
+    List<Citizens> temp = new ArrayList<>();
+    for (Citizens citizen : citizens) {
+      System.out.println(citizen.toString());
+      if (citizen != null && citizen.getNumberOfVaccination() < 2 && citizen.getLastVaccination().plusDays(15).isBefore(LocalDateTime.now())) {
+        temp.add(citizen);
+      }
+    }
+    return temp;
+  }
+
   public void giveVaccin(CoronaDao coronaDao) {
     CitizenValidation citizenValidation = new CitizenValidation();
     Scanner scanner = new Scanner(System.in);
     System.out.println("Kérem adja meg a TAJ számot!");
     String taj = scanner.nextLine();
     citizenValidation.isTajValid(taj);
-    Citizens citizens = coronaDao.searchCitizenAndVaccinationByTaj(taj);
-    if (citizens != null && citizens.getNumberOfVaccination() == 2){
+    Citizens citizen = coronaDao.searchCitizenAndVaccinationByTaj(taj);
+    VaccinType givenVaccin = (citizen.getVaccinations().size() == 0 ? null : citizen.getVaccinations().get(0).getVaccinType());
+    if (citizen != null && citizen.getNumberOfVaccination() == 2) {
       System.out.println("Ezzel a TAJ számmal a beteg már megkapta a második oltást is!");
 
-    } else if (citizens != null && citizens.getNumberOfVaccination() == 1 && !citizens.getLastVaccination().plusDays(15).isAfter(LocalDateTime.now())) {
-      System.out.println("Az első oltás időpontja: " + citizens.getLastVaccination() + ", az oltás fajtája: " + citizens.getVaccinations().get(0).getVaccinType() + " volt.");
-      System.out.println("Mivel az első oltástól számítva még nem telt el 15 nap, így a második oltás még nem adható be!");
-
-    } else if (citizens != null || citizens.getNumberOfVaccination() == 1 && citizens.getLastVaccination().plusDays(15).isBefore(LocalDateTime.now())) {
-      System.out.println("Az első oltás időpontja: " + citizens.getLastVaccination() + ", az oltás fajtája: " + citizens.getVaccinations().get(0).getVaccinType() + " volt.");
-      System.out.println("Kérem adja meg az oltás dátumát (éééé-hh-nn formátumban)!");
-      LocalDate vaccinDate = LocalDate.parse(scanner.nextLine());
-      System.out.println(vaccinDate);
-      System.out.println("(1. Pfizer; 2. AstraZeneca; 3. Moderna; 4. Sputnik V; 5. Sinopharm)");
-      System.out.println("Kérem adja meg a vakcina sorszámát!");
-      VaccinType vaccin = witchVaccin(Integer.parseInt(scanner.nextLine()));
-      System.out.println("A(z) " + vaccin.toString() + " vakcinát választotta!");
-      coronaDao.vaccination(vaccinDate, taj, vaccin);
+    } else if (citizen != null && citizen.getNumberOfVaccination() == 1 && citizen.getLastVaccination().plusDays(15).isAfter(LocalDateTime.now())) {
+      System.out.println(ANSI_RED + "Az előző oltás időpontja: " + citizen.getLastVaccination() + ", az oltás fajtája: " + givenVaccin.toString() + " volt.");
+      System.out.println("Mivel az előző oltástól számítva még nem telt el 15 nap, így a második oltás még nem adható be!" + ANSI_RESET);
+      return;
+    } else if (citizen != null && citizen.getNumberOfVaccination() == 1 && citizen.getLastVaccination().plusDays(15).isBefore(LocalDateTime.now())) {
+      System.out.println("Az első oltás időpontja: " + ANSI_GREEN + citizen.getLastVaccination() + ANSI_RESET + ", az oltás fajtája: " + ANSI_GREEN + givenVaccin.toString() + ANSI_RESET + " volt.");
     }
+    System.out.println("Kérem adja meg az oltás dátumát (éééé-hh-nn formátumban)!");
+    LocalDate vaccinDate = LocalDate.parse(scanner.nextLine());
+    System.out.println(vaccinDate);
+    System.out.println("(1. Pfizer; 2. AstraZeneca; 3. Moderna; 4. Sputnik V; 5. Sinopharm)");
+    System.out.println("Kérem adja meg a vakcina sorszámát!");
+    VaccinType vaccin = witchVaccin(Integer.parseInt(scanner.nextLine()));
+    System.out.println("A(z) " + vaccin.toString() + " vakcinát választotta!");
+    if (citizen.getNumberOfVaccination() == 0 || citizen.getNumberOfVaccination() == 1 && vaccin == givenVaccin) {
+      coronaDao.vaccination(vaccinDate, taj, vaccin);
+    } else {
+      throw new IllegalArgumentException("A két vakcinának meg kell egyeznie!");
+    }
+  }
+
+  public void makeReport() {
 
   }
 
