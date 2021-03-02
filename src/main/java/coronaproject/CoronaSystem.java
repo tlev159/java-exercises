@@ -154,13 +154,16 @@ public class CoronaSystem {
 
   public void makeReport(CoronaDao coronaDao) {
     List<ReportForVaccination> temp = coronaDao.giveRegisteredCitizensBack();
-      Map<Integer, Integer> report = new TreeMap<>();
+      Map<Integer, List<Integer>> report = new TreeMap<>();
       for (ReportForVaccination rfv : temp) {
         if (!report.containsKey(rfv.getZip())) {
-          report.put(rfv.getZip(), rfv.getNumberOfVaccination());
-        } else {
-          report.put(rfv.getZip(), report.get(rfv.getZip()) + rfv.getNumberOfVaccination());
+          report.put(rfv.getZip(), new ArrayList<>(3));
+          report.get(rfv.getZip()).add(0);
+          report.get(rfv.getZip()).add(0);
+          report.get(rfv.getZip()).add(0);
         }
+        report.get(rfv.getZip()).set(rfv.getNumberOfVaccination(), report.get(rfv.getZip()).get(rfv.getNumberOfVaccination()) + 1);
+
     }
     System.out.println(ANSI_BLUE + report + ANSI_RESET);
   }
