@@ -91,7 +91,7 @@ public class CoronaVaccinationMain {
           System.out.println(ANSI_PURPLE + "Készítem a riportot az aktuáális adatok alapján!" + ANSI_RESET);
           Map<Integer, List<Integer>> report = new TreeMap<>();
           report = coronaSystem.makeReport();
-          System.out.println(ANSI_BLUE + report + ANSI_RESET);
+//          System.out.println(ANSI_BLUE + report + ANSI_RESET);
           break;
 
         case 6:

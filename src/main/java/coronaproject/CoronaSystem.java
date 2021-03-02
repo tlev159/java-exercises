@@ -66,12 +66,13 @@ public class CoronaSystem {
     }
     System.out.println(ANSI_BLUE + "Az oltásra regisztáló TAJ-száma:" + ANSI_RESET);
     String taj = scanner.nextLine();
-    while (!citizenValidation.isTajValid(taj) && !citizenValidation.isTajExists(coronaDao, taj)) {
+    while (!citizenValidation.isTajValid(taj) || !citizenValidation.isTajExists(coronaDao, taj)) {
       if (!citizenValidation.isTajValid(taj)) {
         System.out.println(ANSI_RED + "A TAJ-szám érvénytelen! Kérjem, adjon meg érvényes TAJ-számot!" + ANSI_RESET);
         taj = scanner.nextLine();
       } else {
-        System.out.println(ANSI_RED + "Ezzel a TAJ-számmal már regisztálták a " + coronaDao.searchForExistingTaj(taj).getFullName() + " nevű pácienst!" + ANSI_RESET);
+        System.out.println(ANSI_RED + "Ezzel a TAJ-számmal már regisztálták a(z) " + coronaDao.searchForExistingTaj(taj).getFullName() + " nevű pácienst!");
+        System.out.println("Kérem adjon meg másik TAJ-számot!" + ANSI_RESET);
         taj = scanner.nextLine();
       }
     }
@@ -102,7 +103,6 @@ public class CoronaSystem {
     int postalCode = Integer.parseInt(scanner.nextLine());
     String fileName = LocalDate.now().toString()+ "_" + postalCode + ".csv";
     List<Citizens> citizensInGivenTown = coronaDao.findCitizensWithGivenPostalCode(postalCode);
-//    System.out.println(Arrays.asList(citizensInGivenTown));
     citizensInGivenTown = selectToVaccinedCitizens(citizensInGivenTown);
     generateFile(fileName, citizensInGivenTown);
     System.out.println(ANSI_GREEN + "A fájl kiírása megtörtént (" + fileName + ") néven!" + ANSI_RESET);
