@@ -169,6 +169,21 @@ public class CoronaSystem {
     }
   }
 
+  public void deleteVaccinationWithNotes() {
+    CitizenValidation citizenValidation = new CitizenValidation();
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("Kérem adja meg a törlendő páciens TAJ-számát!");
+    String taj = scanner.nextLine();
+    while (!citizenValidation.isTajValid(taj)) {
+      System.out.println("A megadott TAJ-szám helytelen! Kérem írja be mégegyszer!");
+      taj = scanner.nextLine();
+    }
+    Citizens citizen = coronaDao.searchCitizenAndVaccinationByTaj(taj);
+    System.out.println("Kérem adja meg a meghiúsulás okát!");
+    String note = scanner.nextLine();
+    coronaDao.deleteVaccinationWithNotes(taj, note);
+  }
+
   public Map<Integer, List<Integer>> makeReport() {
     List<ReportForVaccination> temp = coronaDao.giveRegisteredCitizensBack();
       Map<Integer, List<Integer>> report = new TreeMap<>();

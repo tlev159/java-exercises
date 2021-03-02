@@ -76,7 +76,15 @@ public class CoronaVaccinationMain {
 
         case 4:
           System.out.println(ANSI_PURPLE + "Az 'oltás vagy annak meghíúsulásának rögzítése' menüt választotta!" + ANSI_RESET);
-          coronaSystem.giveVaccin();
+          System.out.println(ANSI_PURPLE + "Kérem adja meg, hogy (1) oltást szeretne rögzíteni vagy (2) törölni szeretne!" + ANSI_RESET);
+          int registerOrDelete = Integer.parseInt(scanner.nextLine());
+          if (registerOrDelete == 1) {
+              coronaSystem.giveVaccin();
+              System.out.println("Az oltás regisztrálása megtörtént!");
+            } else if (registerOrDelete == 2) {
+              coronaSystem.deleteVaccinationWithNotes();
+              System.out.println("A törlés regisztációja megtörtént!");
+            }
           break;
 
         case 5:
