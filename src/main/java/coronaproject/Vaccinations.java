@@ -1,17 +1,17 @@
 package coronaproject;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class Vaccinations {
 
   private long vaccinationId;
   private long citizenId;
-  private LocalDateTime date;
+  private LocalDate date;
   private String status;
   private String note;
   private VaccinType vaccinType;
 
-  public Vaccinations(LocalDateTime date, String status, String note, VaccinType vaccinType) {
+  public Vaccinations(LocalDate date, String status, String note, VaccinType vaccinType) {
     this.date = date;
     this.status = status;
     this.note = note;
@@ -26,7 +26,7 @@ public class Vaccinations {
     return citizenId;
   }
 
-  public LocalDateTime getDate() {
+  public LocalDate getDate() {
     return date;
   }
 

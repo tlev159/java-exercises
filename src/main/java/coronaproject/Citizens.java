@@ -1,5 +1,6 @@
 package coronaproject;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,30 +14,35 @@ public class Citizens {
   private String email;
   private String taj;
   private long numberOfVaccination;
-  private LocalDateTime lastVaccination;
+  private LocalDate lastVaccination;
   private List<Vaccinations> vaccinations = new ArrayList<>();
 
-  public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination, LocalDateTime lastVaccination) {
-    isCorrectCitizen(fullName, zip, age, email, email, taj);
-    this.id = id;
-    this.fullName = fullName;
-    this.zip = zip;
-    this.age = age;
-    this.email = email;
-    this.taj = taj;
-    this.numberOfVaccination = numberOfVaccination;
-    this.lastVaccination = lastVaccination;
+
+  // 1.
+  public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination, LocalDate lastVaccination) {
+    if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
+      this.id = id;
+      this.fullName = fullName;
+      this.zip = zip;
+      this.age = age;
+      this.email = email;
+      this.taj = taj;
+      this.numberOfVaccination = numberOfVaccination;
+      this.lastVaccination = lastVaccination;
+    }
+  }
+// 2.  javítani a sorrendet!!!!!!!!!!!
+  public Citizens(String fullName, int zip, int age, String email1, String taj) {
+//    if (isCorrectCitizen(fullName, zip, age, email1, email2, taj)) {
+      this.fullName = fullName;
+      this.zip = zip;
+      this.age = age;
+      this.email = email1;
+      this.taj = taj;
+//    }
   }
 
-  public Citizens(String fullName, int zip, int age, String email1, String email2, String taj) {
-    isCorrectCitizen(fullName, zip, age, email1, email2, taj);
-    this.fullName = fullName;
-    this.zip = zip;
-    this.age = age;
-    this.email = email1;
-    this.taj = taj;
-  }
-
+  // 3.
   public Citizens(long id, String fullName, int zip, int age, String email, String taj) {
     this.id = id;
     this.fullName = fullName;
@@ -46,26 +52,28 @@ public class Citizens {
     this.taj = taj;
   }
 
-  public Citizens(String fullName, int zip, int age, String email, String taj) {
-    isCorrectCitizen(fullName, zip, age, email, email, taj);
+  // 4.
+  public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination) {
+    this.id = id;
     this.fullName = fullName;
     this.zip = zip;
     this.age = age;
     this.email = email;
     this.taj = taj;
+    this.numberOfVaccination = numberOfVaccination;
   }
 
   public void addVaccination(Vaccinations vaccinations) {
     this.vaccinations.add(vaccinations);
   }
 
-  private void isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
+  private boolean isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
     CitizenValidation cv = new CitizenValidation();
-    cv.isValidCitizenName(fullName);
-    cv.isValidPostcode(zip);
-    cv.isValidAge(age);
-    cv.areTheEmailsValid(email1, email2);
-    cv.isTajValid(taj);
+    return (cv.isValidCitizenName(fullName) &&
+    cv.isValidPostcode(zip) &&
+    cv.isValidAge(age) &&
+    cv.areTheEmailsValid(email1, email2) &&
+    cv.isTajValid(taj));
   }
 
   public long getId() {
@@ -96,7 +104,7 @@ public class Citizens {
     return numberOfVaccination;
   }
 
-  public LocalDateTime getLastVaccination() {
+  public LocalDate getLastVaccination() {
     return lastVaccination;
   }
 
@@ -104,7 +112,7 @@ public class Citizens {
     this.numberOfVaccination = numberOfVaccination;
   }
 
-  public void setLastVaccination(LocalDateTime lastVaccination) {
+  public void setLastVaccination(LocalDate lastVaccination) {
     this.lastVaccination = lastVaccination;
   }
 

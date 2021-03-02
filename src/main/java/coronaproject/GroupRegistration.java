@@ -12,7 +12,13 @@ public class GroupRegistration {
 
   private List<Citizens> citizens = new ArrayList<>();
 
-  public List<Citizens> readRegistrationDataFromFile(BufferedReader reader, CoronaDao coronaDao) throws IOException {
+  private CoronaDao coronaDao;
+
+  public GroupRegistration(CoronaDao coronaDao) {
+    this.coronaDao = coronaDao;
+  }
+
+  public List<Citizens> readRegistrationDataFromFile(BufferedReader reader) throws IOException {
     CitizenValidation citizenValidation = new CitizenValidation();
     String line;
     reader.readLine();

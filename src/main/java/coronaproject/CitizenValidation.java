@@ -2,7 +2,8 @@ package coronaproject;
 
 public class CitizenValidation {
 
-  protected void isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
+
+  public void isCorrectCitizen(String fullName, int zip, int age, String email1, String email2, String taj) {
     isValidCitizenName(fullName);
     isValidPostcode(zip);
     isValidAge(age);
@@ -10,36 +11,39 @@ public class CitizenValidation {
     isTajValid(taj);
   }
 
-  protected void isTajValid(String taj) {
+  protected boolean isTajValid(String taj) {
     if (!isCorrectTaj(taj)) {
-      throw new IllegalArgumentException("Nem helyes a TAJ-szám!");
+      return false;
     }
+    return true;
   }
 
-  protected void areTheEmailsValid(String email1, String email2) {
+  protected boolean areTheEmailsValid(String email1, String email2) {
     if (!(email1.equals(email2)) || (email1.length() < 4 || !email1.contains("@"))) {
-      throw new IllegalArgumentException("Email incorrect!");
+      return false;
     }
+    return true;
   }
 
-  protected void isValidAge(int age) {
+  protected boolean isValidAge(int age) {
     if (age <= 10 || age >= 150) {
-      throw new IllegalArgumentException("Az életkor 10 és 150 között lehet!");
-//      throw new IllegalArgumentException("Wrong age!");
+      return false;
     }
+    return true;
   }
 
-  protected void isValidPostcode(int zip) {
+  protected boolean isValidPostcode(int zip) {
     if (zip == 0 || zip < 1000 || zip > 9999) {
-      throw new IllegalArgumentException("Az irányítószán nem megfelelő!");
+      return false;
     }
+    return true;
   }
 
-  protected void isValidCitizenName(String fullName) {
+  protected boolean isValidCitizenName(String fullName) {
     if (fullName == null || fullName.isEmpty()) {
-      throw new IllegalArgumentException("A név nem lehet null vagy üres!");
-//      throw new IllegalArgumentException("Name can not empty!");
+      return false;
     }
+    return true;
   }
 
   private boolean isCorrectTaj(String taj) {
@@ -60,10 +64,11 @@ public class CitizenValidation {
     return (sum % 10 == cvd) ? true:false;
   }
 
-  protected void isTajExists(CoronaDao coronaDao, String taj) {
+  protected boolean isTajExists(CoronaDao coronaDao, String taj) {
     if (coronaDao.searchForExistingTaj(taj) != null) {
-      throw new IllegalArgumentException("Már van ilyen TAJ-számú regisztáció!");
+      return false;
     }
+    return true;
   }
 
   public boolean validationForFileRows(String fullName, int zip, int age, String email, String taj, CoronaDao coronaDao) {

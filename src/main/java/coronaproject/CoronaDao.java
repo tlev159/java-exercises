@@ -3,12 +3,10 @@ package coronaproject;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.*;
-import java.text.Collator;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CoronaDao {
@@ -20,7 +18,7 @@ public class CoronaDao {
     this.dataSource = dataSource;
   }
 
-  public void addCitizenToDatabase(Citizens citizen) {
+  public boolean addCitizenToDatabase(Citizens citizen) {
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt = conn.prepareStatement("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
                  Statement.RETURN_GENERATED_KEYS);
@@ -30,14 +28,16 @@ public class CoronaDao {
       stmt.setLong(3, citizen.getAge());
       stmt.setString(4, citizen.getEmail());
       stmt.setString(5, citizen.getTaj());
-      if (searchForExistingTaj(citizen.getTaj()) == null) {
+//      if (searchForExistingTaj(citizen.getTaj()) == null) {
         stmt.executeUpdate();
-      } else {
-        throw new IllegalArgumentException("Már létezik ilyen TAJ-szám!");
-      }
+//      } else {
+//        System.out.println("Már létezik ilyen TAJ-szám!");
+//
+//      }
     } catch (SQLException se) {
       throw new IllegalStateException("Can not connect to database!", se);
     }
+    return true;
   }
 
   public List<Citizens> insertGroupOfCitizens(List<Citizens> citizens) {
@@ -56,11 +56,11 @@ public class CoronaDao {
           ps.setLong(3, citizen.getAge());
           ps.setString(4, citizen.getEmail());
           ps.setString(5, citizen.getTaj());
-          if (searchForExistingTaj(citizen.getTaj()) == null) {
+//          if (searchForExistingTaj(citizen.getTaj()) == null) {
             ps.executeUpdate();
-          } else {
-            throw new IllegalArgumentException("Már létezik ilyen TAJ-szám!");
-          }
+//          } else {
+//            throw new IllegalArgumentException("Már létezik ilyen TAJ-szám!");
+//          }
         }
         conn.commit();
       } catch (SQLException se) {
@@ -78,11 +78,11 @@ public class CoronaDao {
     Citizens citizen = searchCitizenAndVaccinationByTaj(taj);
     long citizenId = citizen.getId();
     long numberOfVaccination = citizen.getNumberOfVaccination();
-    LocalDateTime dateTime;
+    LocalDate dateTime;
     if (citizen.getLastVaccination() != null) {
       dateTime = citizen.getLastVaccination();
     } else {
-      dateTime = LocalDateTime.of(date, LocalTime.now());
+      dateTime = date;
     }
     try (Connection conn = dataSource.getConnection();
          PreparedStatement ps1 = conn.prepareStatement("UPDATE citizens SET number_of_vaccination = ?, last_vaccination = ? WHERE taj = ?");
@@ -93,7 +93,7 @@ public class CoronaDao {
         ps1.setLong(1, numberOfVaccination + 1);
         ps1.setTimestamp(2, Timestamp.valueOf(LocalDateTime.of(date, LocalTime.of(16, 0))));
         ps2.setLong(1, citizenId);
-        ps2.setTimestamp(2, Timestamp.valueOf(dateTime));
+        ps2.setTimestamp(2, Timestamp.valueOf(LocalDateTime.of(dateTime, LocalTime.of(16,0))));
         ps2.setString(3, "GIVEN");
         ps2.setString(4, type.toString());
         ps1.executeUpdate();
@@ -117,12 +117,14 @@ public class CoronaDao {
 
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
-          LocalDateTime nullTime = LocalDateTime.of(0, 1, 1, 0, 0);
-          if (rs.getTimestamp("last_vaccination") != null && rs.getTimestamp("last_vaccination").toLocalDateTime() != nullTime) {
-            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), rs.getTimestamp("last_vaccination").toLocalDateTime());
+//          LocalDate nullTime = LocalDate.of(0, 1, 1);
+          if (rs.getTimestamp("last_vaccination") != null) {
+            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), rs.getTimestamp("last_vaccination").toLocalDateTime().toLocalDate());
+            System.out.println("valami: " + citizen);
             temp.add(citizen);
           } else {
-            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), nullTime);
+            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"));
+            System.out.println("másik valami: " + citizen);
             temp.add(citizen);
           }
         }
@@ -178,7 +180,7 @@ public class CoronaDao {
           temp = new Citizens(id, name, zip, age, email, taj);
           temp.setNumberOfVaccination(numberOfVaccination);
           if (rs.getTimestamp("last_vaccination") != null) {
-            temp.setLastVaccination(rs.getTimestamp("last_vaccination").toLocalDateTime());
+            temp.setLastVaccination(rs.getTimestamp("last_vaccination").toLocalDateTime().toLocalDate());
           }
         }
         return temp;
@@ -201,7 +203,7 @@ public class CoronaDao {
 
       try (ResultSet rs = stmt.executeQuery()) {
         while (rs.next()) {
-          LocalDateTime date = rs.getTimestamp("vaccination_date").toLocalDateTime();
+          LocalDate date = rs.getTimestamp("vaccination_date").toLocalDateTime().toLocalDate();
           String status = rs.getString("status");
           String note = rs.getString("note");
 //          temp.setNumberOfVaccination(temp.getNumberOfVaccination() + 1);

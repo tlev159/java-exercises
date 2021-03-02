@@ -3,7 +3,10 @@ package coronaproject;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class CoronaVaccinationMain {
 
@@ -26,7 +29,6 @@ public class CoronaVaccinationMain {
 
     CoronaVaccinationMain cvm = new CoronaVaccinationMain();
     cvm.setCitizenValidation(new CitizenValidation());
-    CoronaSystem coronaSystem = new CoronaSystem();
     MariaDbDataSource dataSource = new MariaDbDataSource();
 
     try {
@@ -38,19 +40,19 @@ public class CoronaVaccinationMain {
     }
 
     CoronaDao coronaDao = new CoronaDao(dataSource);
+    CoronaSystem coronaSystem = new CoronaSystem(coronaDao);
 
     Scanner scanner = new Scanner(System.in);
     int pushedMenu = 0;
 
-    while (pushedMenu != 7) {
+    while (pushedMenu != 6) {
 
       System.out.println("1. Személyek regisztrációja oltásra");
       System.out.println("2. Tömeges regisztráció fájlból");
       System.out.println("3. Oltási időpontok generálása a holnapi napra irányítószám alapján");
-      System.out.println("4. Oltás rögzítése");
-      System.out.println("5. Oltás meghiúsulás rögzítése");
-      System.out.println("6. Riport készítése az oltásokról");
-      System.out.println("7. Kilépés");
+      System.out.println("4. Oltás vagy annak meghíúsulásának rögzítése");
+      System.out.println("5. Riport készítése az oltásokról");
+      System.out.println("6. Kilépés");
       System.out.println("Kérem, adja meg a kívánt menüpont sorszámát!");
 
       pushedMenu = Integer.parseInt(scanner.nextLine());
@@ -58,38 +60,34 @@ public class CoronaVaccinationMain {
       switch (pushedMenu) {
         case 1:
           System.out.println(ANSI_PURPLE + "A regisztrációt választotta!" + ANSI_RESET);
-          coronaSystem.registrate(coronaDao);
-          System.out.println(ANSI_GREEN + "Sikeresen regisztáció!" + ANSI_RESET + "\n");
+          coronaSystem.registrate();
+          System.out.println(ANSI_GREEN + "Sikeres regisztáció!" + ANSI_RESET + "\n");
           break;
         case 2:
           System.out.println(ANSI_PURPLE + "A tömeges regisztrációt választotta fájlbeolvasással!");
           System.out.println("Kérem adja meg a fájl helyét" + ANSI_RESET);
-        coronaSystem.registerFromCvdFile(coronaDao);
+          coronaSystem.registerFromCvdFile();
           break;
 
         case 3:
           System.out.println(ANSI_PURPLE + "A 'generálás' menüt választotta!" + ANSI_RESET);
-        coronaSystem.generating(coronaDao);
+          coronaSystem.generating();
           break;
 
         case 4:
-          System.out.println(ANSI_PURPLE + "Az 'oltás' menüt választotta!" + ANSI_RESET);
-        coronaSystem.giveVaccin(coronaDao);
+          System.out.println(ANSI_PURPLE + "Az 'oltás vagy annak meghíúsulásának rögzítése' menüt választotta!" + ANSI_RESET);
+          coronaSystem.giveVaccin();
           break;
 
         case 5:
-          System.out.println(ANSI_PURPLE + "Az 'oltás meghiúsulása' menüt' választotta!" + ANSI_RESET);
-//        cvm.notGivenVaccin(coronaDao);
+          System.out.println(ANSI_PURPLE + "Készítem a riportot az aktuáális adatok alapján!" + ANSI_RESET);
+          Map<Integer, List<Integer>> report = new TreeMap<>();
+          report = coronaSystem.makeReport();
+          System.out.println(ANSI_BLUE + report + ANSI_RESET);
           break;
 
         case 6:
-          System.out.println(ANSI_PURPLE + "Készítem a riportot az aktuáális adatok alapján!" + ANSI_RESET);
-        coronaSystem.makeReport(coronaDao);
-          break;
-
-        case 7:
           System.out.println(ANSI_RED + "Köszönöm közreműködését! Viszont látásra!" + ANSI_RESET);
-//        byby();
           break;
 
         default:
