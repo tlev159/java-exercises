@@ -31,36 +31,40 @@ public class Citizens {
       this.lastVaccination = lastVaccination;
     }
   }
-// 2.  javítani a sorrendet!!!!!!!!!!!
-  public Citizens(String fullName, int zip, int age, String email1, String taj) {
-//    if (isCorrectCitizen(fullName, zip, age, email1, email2, taj)) {
+
+  public Citizens(String fullName, int zip, int age, String email, String taj) {
+    if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
       this.fullName = fullName;
       this.zip = zip;
       this.age = age;
-      this.email = email1;
+      this.email = email;
       this.taj = taj;
-//    }
+    }
   }
 
   // 3.
   public Citizens(long id, String fullName, int zip, int age, String email, String taj) {
-    this.id = id;
-    this.fullName = fullName;
-    this.zip = zip;
-    this.age = age;
-    this.email = email;
-    this.taj = taj;
+    if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
+      this.id = id;
+      this.fullName = fullName;
+      this.zip = zip;
+      this.age = age;
+      this.email = email;
+      this.taj = taj;
+    }
   }
 
   // 4.
   public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination) {
-    this.id = id;
-    this.fullName = fullName;
-    this.zip = zip;
-    this.age = age;
-    this.email = email;
-    this.taj = taj;
-    this.numberOfVaccination = numberOfVaccination;
+    if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
+      this.id = id;
+      this.fullName = fullName;
+      this.zip = zip;
+      this.age = age;
+      this.email = email;
+      this.taj = taj;
+      this.numberOfVaccination = numberOfVaccination;
+    }
   }
 
   public void addVaccination(Vaccinations vaccinations) {

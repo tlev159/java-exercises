@@ -2,6 +2,8 @@ package coronaproject;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CitizensTest {
@@ -13,23 +15,29 @@ class CitizensTest {
   }
 
   @Test
-  public void testFullNameNullThrow() {
+  public void testFullNameNullWrong() {
 
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 11, "em@il","123456788"));
+    Citizens citizen = new Citizens(null, 6100, 11, "em@il","123456788");
+
+    assertEquals(null, citizen.getFullName());
+    assertEquals(null, citizen.getEmail());
+    assertEquals(null, citizen.getTaj());
   }
 
   @Test
-              public void testZip() {
-    Citizens citizens = new Citizens("Jane Doe", 6100, 11, "em@il","123456788");
+  public void testZip() {
+    Citizens citizen = new Citizens("Jane Doe", 6100, 11, "em@il","123456788");
 
-    assertEquals(6100, citizens.getZip());
+    assertEquals(6100, citizen.getZip());
+    assertEquals("em@il", citizen.getEmail());
   }
 
   @Test
   public void testZipThrow() {
 
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 999, 11, "em@il","123456788"));
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 10000, 11, "em@il","123456788"));
+    Citizens citizen = new Citizens("Jane Doe", 999, 11, "em@il","123456788");
+    assertEquals(0L, citizen.getZip());
+    assertEquals(null, citizen.getEmail());
 
   }
 
@@ -43,9 +51,13 @@ class CitizensTest {
   @Test
   public void testAgeMinMaxThrows() {
 
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 10, "em@il","123456788"));
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 150, "em@il","123456788"));
+    Citizens citizen1 = new Citizens("Jane Doe", 6100, 10, "em@il","123456788");
+    assertEquals(0L, citizen1.getAge());
+    assertEquals(null, citizen1.getEmail());
 
+    Citizens citizen2 = new Citizens("Jane Doe", 6100, 150, "em@il","123456788");
+    assertEquals(0L, citizen1.getAge());
+    assertEquals(null, citizen1.getEmail());
   }
 
   @Test
@@ -59,24 +71,35 @@ class CitizensTest {
   @Test
   public void testWrongEmailThrow() {
 
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 11, "em@il", "123456788"));
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 11, "em@", "123456788"));
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 11, "emil", "123456788"));
+    Citizens citizen1 = new Citizens(1,"Jane Doe", 6100, 11, "email", "123456788", 0, LocalDate.now());
+    assertEquals(null, citizen1.getEmail());
+
+    Citizens citizen2 =  new Citizens("Jane Doe", 6100, 11, "em@", "123456788");
+    assertEquals(null, citizen1.getEmail());
+
+    Citizens citizen3 = new Citizens("Jane Doe", 6100, 11, "emil", "123456788");
+    assertEquals(null, citizen1.getEmail());
+
+    assertEquals(null, citizen1.getEmail());
+    assertEquals(null, citizen1.getEmail());
 
   }
 
   @Test
   public void testCorrectTaj() {
 
-    Citizens citizens = new Citizens("Jane Doe", 6100, 11, "em@il", "123456788");
+    Citizens citizen = new Citizens("Jane Doe", 6100, 11, "em@il", "123456788");
 
-    assertEquals("123456788", citizens.getTaj());
+    assertEquals("123456788", citizen.getTaj());
+    assertEquals("em@il", citizen.getEmail());
   }
 
   @Test
   public void testWrongTajNumber() {
 
-    assertThrows(IllegalArgumentException.class, () -> new Citizens(null, 6100, 11, "em@il", "123456789"));
+    Citizens citizen = new Citizens("Jane Doe", 6100, 11, "em@il", "123456789");
+    assertEquals(null, citizen.getEmail());
+    assertEquals(0L, citizen.getZip());
 
   }
 }
