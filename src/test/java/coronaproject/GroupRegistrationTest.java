@@ -38,7 +38,7 @@ class GroupRegistrationTest {
 //        throw new IllegalStateException("A fájl nem olvasható!", ioe);
 //      }
 //
-//      List<Citizens> citizens = gr.getCitizens();
+//      List<Citizen> citizens = gr.getCitizens();
 //      System.out.println(Arrays.asList(citizens));
 //
 //      assertEquals("Jane Doe", citizens.get(1).getFullName());

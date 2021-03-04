@@ -18,7 +18,7 @@ public class CoronaDao {
     this.dataSource = dataSource;
   }
 
-  public boolean addCitizenToDatabase(Citizens citizen) {
+  public boolean addCitizenToDatabase(Citizen citizen) {
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt = conn.prepareStatement("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
                  Statement.RETURN_GENERATED_KEYS);
@@ -40,7 +40,7 @@ public class CoronaDao {
     return true;
   }
 
-  public List<Citizens> insertGroupOfCitizens(List<Citizens> citizens) {
+  public List<Citizen> insertGroupOfCitizens(List<Citizen> citizens) {
     try (Connection conn = dataSource.getConnection()) {
       conn.setAutoCommit(false);
 
@@ -49,7 +49,7 @@ public class CoronaDao {
       ) {
         List<Integer> failedRows = new ArrayList<>();
         int i = 1;
-        for (Citizens citizen : citizens) {
+        for (Citizen citizen : citizens) {
 
           ps.setString(1, citizen.getFullName());
           ps.setInt(2, citizen.getZip());
@@ -75,7 +75,7 @@ public class CoronaDao {
   }
 
   public void vaccination(LocalDate date, String taj, VaccinType type) {
-    Citizens citizen = searchCitizenAndVaccinationByTaj(taj);
+    Citizen citizen = searchCitizenAndVaccinationByTaj(taj);
     long citizenId = citizen.getId();
     long numberOfVaccination = citizen.getNumberOfVaccination();
     LocalDate dateTime;
@@ -108,7 +108,7 @@ public class CoronaDao {
   }
 
   public void deleteVaccinationWithNotes(String taj, String notes) {
-    Citizens citizen = searchCitizenAndVaccinationByTaj(taj);
+    Citizen citizen = searchCitizenAndVaccinationByTaj(taj);
     long citizenId = citizen.getId();
     LocalDate date = LocalDate.now();
     try (Connection conn = dataSource.getConnection();
@@ -129,8 +129,8 @@ public class CoronaDao {
     }
   }
 
-  public List<Citizens> findCitizensWithGivenPostalCode(int postalCode) {
-    List<Citizens> temp = new ArrayList<>();
+  public List<Citizen> findCitizensWithGivenPostalCode(int postalCode) {
+    List<Citizen> temp = new ArrayList<>();
     try (Connection conn = dataSource.getConnection();
          PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE number_of_vaccination < 2 and zip = ? ORDER BY age DESC, citizen_name LIMIT 16")
     ) {
@@ -139,10 +139,10 @@ public class CoronaDao {
       try (ResultSet rs = ps.executeQuery()) {
         while (rs.next()) {
           if (rs.getTimestamp("last_vaccination") != null) {
-            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), rs.getTimestamp("last_vaccination").toLocalDateTime().toLocalDate());
+            Citizen citizen = new Citizen(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"), rs.getTimestamp("last_vaccination").toLocalDateTime().toLocalDate());
             temp.add(citizen);
           } else {
-            Citizens citizen = new Citizens(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"));
+            Citizen citizen = new Citizen(rs.getLong("citizen_id"), rs.getString("citizen_name"), rs.getInt("zip"), rs.getInt("age"), rs.getString("email"), rs.getString("taj"), rs.getLong("number_of_vaccination"));
             temp.add(citizen);
           }
         }
@@ -180,8 +180,8 @@ public class CoronaDao {
     return result;
   }
 
-  public Citizens searchForExistingTaj(String taj) {
-    Citizens temp = null;
+  public Citizen searchForExistingTaj(String taj) {
+    Citizen temp = null;
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt = conn.prepareStatement("SELECT * FROM citizens WHERE taj = ?");
     ) {
@@ -195,7 +195,7 @@ public class CoronaDao {
           int age = rs.getInt("age");
           String email = rs.getString("email");
           long numberOfVaccination = rs.getLong("number_of_vaccination");
-          temp = new Citizens(id, name, zip, age, email, taj);
+          temp = new Citizen(id, name, zip, age, email, taj);
           temp.setNumberOfVaccination(numberOfVaccination);
           if (rs.getTimestamp("last_vaccination") != null) {
             temp.setLastVaccination(rs.getTimestamp("last_vaccination").toLocalDateTime().toLocalDate());
@@ -210,8 +210,8 @@ public class CoronaDao {
     }
   }
 
-  public Citizens searchCitizenAndVaccinationByTaj(String taj) {
-    Citizens temp = null;
+  public Citizen searchCitizenAndVaccinationByTaj(String taj) {
+    Citizen temp = null;
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt = conn.prepareStatement("SELECT * FROM vaccinations v JOIN citizens c WHERE c.citizen_id = v.citizen_id AND c.citizen_id = ?");
     ) {

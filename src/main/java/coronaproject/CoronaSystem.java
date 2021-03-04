@@ -26,7 +26,7 @@ public class CoronaSystem {
     this.coronaDao = coronaDao;
   }
 
-  public Citizens registrate() {
+  public Citizen registrate() {
     CitizenValidation citizenValidation = new CitizenValidation();
     Scanner scanner = new Scanner(System.in);
     System.out.println(ANSI_BLUE + "Kérem, adja meg az oltásra regisztáló adatait!");
@@ -77,7 +77,7 @@ public class CoronaSystem {
       }
     }
 
-    Citizens citizen = new Citizens(fullName, zip, age, email1, taj);
+    Citizen citizen = new Citizen(fullName, zip, age, email1, taj);
     coronaDao.addCitizenToDatabase(citizen);
     return citizen;
   }
@@ -88,7 +88,7 @@ public class CoronaSystem {
     String file = scanner.nextLine();
     try (BufferedReader reader = Files.newBufferedReader(Path.of(file))) {
       GroupRegistration gr = new GroupRegistration(coronaDao);
-      List<Citizens> citizens = gr.readRegistrationDataFromFile(reader);
+      List<Citizen> citizens = gr.readRegistrationDataFromFile(reader);
       coronaDao.insertGroupOfCitizens(citizens);
       System.out.println(ANSI_GREEN + citizens.size() + " fő regisztrálása megtörtént!" + ANSI_RESET);
     } catch (IOException ioe) {
@@ -102,17 +102,17 @@ public class CoronaSystem {
     System.out.println(ANSI_BLUE + "Kérem adja meg a listázandó település irányítószámát!" + ANSI_RESET);
     int postalCode = Integer.parseInt(scanner.nextLine());
     String fileName = LocalDate.now().toString()+ "_" + postalCode + ".csv";
-    List<Citizens> citizensInGivenTown = coronaDao.findCitizensWithGivenPostalCode(postalCode);
-    citizensInGivenTown = selectToVaccinedCitizens(citizensInGivenTown);
-    generateFile(fileName, citizensInGivenTown);
+    List<Citizen> citizenInGivenTown = coronaDao.findCitizensWithGivenPostalCode(postalCode);
+    citizenInGivenTown = selectToVaccinedCitizens(citizenInGivenTown);
+    generateFile(fileName, citizenInGivenTown);
     System.out.println(ANSI_GREEN + "A fájl kiírása megtörtént (" + fileName + ") néven!" + ANSI_RESET);
   }
 
-  private void generateFile(String fileName, List<Citizens> citizens) {
+  private void generateFile(String fileName, List<Citizen> citizens) {
     LocalDateTime firstTime = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(8, 0));
     try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(Path.of(fileName)))) {
       writer.println("Időpont;Név;Irányítószám;Életkor;E-mail cím;TAJ szám");
-      for (Citizens tmp : citizens) {
+      for (Citizen tmp : citizens) {
         writer.print(firstTime);
         writer.print(";" + tmp.getFullName() + ";");
         writer.print(tmp.getZip() + ";");
@@ -126,9 +126,9 @@ public class CoronaSystem {
     }
   }
 
-  private List<Citizens> selectToVaccinedCitizens(List<Citizens> citizens) {
-    List<Citizens> temp = new ArrayList<>();
-    for (Citizens citizen : citizens) {
+  private List<Citizen> selectToVaccinedCitizens(List<Citizen> citizens) {
+    List<Citizen> temp = new ArrayList<>();
+    for (Citizen citizen : citizens) {
 //      System.out.println(citizen.toString());
       if (citizen != null && citizen.getNumberOfVaccination() < 2 && (citizen.getLastVaccination() == null || citizen.getLastVaccination().plusDays(15).isBefore(LocalDate.now()))) {
         temp.add(citizen);
@@ -143,7 +143,7 @@ public class CoronaSystem {
     System.out.println("Kérem adja meg a TAJ számot!");
     String taj = scanner.nextLine();
     citizenValidation.isTajValid(taj);
-    Citizens citizen = coronaDao.searchCitizenAndVaccinationByTaj(taj);
+    Citizen citizen = coronaDao.searchCitizenAndVaccinationByTaj(taj);
     VaccinType givenVaccin = (citizen.getVaccinations().size() == 0 ? null : citizen.getVaccinations().get(0).getVaccinType());
     if (citizen != null && citizen.getNumberOfVaccination() == 2) {
       System.out.println("Ezzel a TAJ számmal a beteg már megkapta a második oltást is!");
@@ -178,7 +178,7 @@ public class CoronaSystem {
       System.out.println("A megadott TAJ-szám helytelen! Kérem írja be mégegyszer!");
       taj = scanner.nextLine();
     }
-    Citizens citizen = coronaDao.searchCitizenAndVaccinationByTaj(taj);
+    Citizen citizen = coronaDao.searchCitizenAndVaccinationByTaj(taj);
     System.out.println("Kérem adja meg a meghiúsulás okát!");
     String note = scanner.nextLine();
     coronaDao.deleteVaccinationWithNotes(taj, note);

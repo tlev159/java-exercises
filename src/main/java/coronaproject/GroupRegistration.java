@@ -10,7 +10,7 @@ public class GroupRegistration {
 
   public static final String SEPARATE = ";";
 
-  private List<Citizens> citizens = new ArrayList<>();
+  private List<Citizen> citizens = new ArrayList<>();
 
   private CoronaDao coronaDao;
 
@@ -18,7 +18,7 @@ public class GroupRegistration {
     this.coronaDao = coronaDao;
   }
 
-  public List<Citizens> readRegistrationDataFromFile(BufferedReader reader) throws IOException {
+  public List<Citizen> readRegistrationDataFromFile(BufferedReader reader) throws IOException {
     CitizenValidation citizenValidation = new CitizenValidation();
     String line;
     reader.readLine();
@@ -32,7 +32,7 @@ public class GroupRegistration {
       String email = temp[3];
       String taj = temp[4];
       if (citizenValidation.validationForFileRows(fullName, zip, age, email, taj, coronaDao)) {
-        citizens.add(new Citizens(fullName, zip, age, email, taj));
+        citizens.add(new Citizen(fullName, zip, age, email, taj));
       } else {
         failedRows.add(proofedLine);
       }
@@ -45,7 +45,7 @@ public class GroupRegistration {
     return citizens;
   }
 
-  public List<Citizens> getCitizens() {
+  public List<Citizen> getCitizens() {
     return citizens;
 
   }

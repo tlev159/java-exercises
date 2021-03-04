@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Citizens {
+public class Citizen {
 
   private long id;
   private String fullName;
@@ -19,7 +19,7 @@ public class Citizens {
 
 
   // 1.
-  public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination, LocalDate lastVaccination) {
+  public Citizen(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination, LocalDate lastVaccination) {
     if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
       this.id = id;
       this.fullName = fullName;
@@ -32,7 +32,7 @@ public class Citizens {
     }
   }
 
-  public Citizens(String fullName, int zip, int age, String email, String taj) {
+  public Citizen(String fullName, int zip, int age, String email, String taj) {
     if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
       this.fullName = fullName;
       this.zip = zip;
@@ -43,7 +43,7 @@ public class Citizens {
   }
 
   // 3.
-  public Citizens(long id, String fullName, int zip, int age, String email, String taj) {
+  public Citizen(long id, String fullName, int zip, int age, String email, String taj) {
     if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
       this.id = id;
       this.fullName = fullName;
@@ -55,7 +55,7 @@ public class Citizens {
   }
 
   // 4.
-  public Citizens(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination) {
+  public Citizen(long id, String fullName, int zip, int age, String email, String taj, long numberOfVaccination) {
     if (isCorrectCitizen(fullName, zip, age, email, email, taj)) {
       this.id = id;
       this.fullName = fullName;
@@ -126,7 +126,7 @@ public class Citizens {
 
   @Override
   public String toString() {
-    return "Citizens{" +
+    return "Citizen{" +
             "id=" + id +
             ", fullName='" + fullName + '\'' +
             ", zip=" + zip +
