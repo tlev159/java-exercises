@@ -18,7 +18,7 @@ public class CoronaDao {
     this.dataSource = dataSource;
   }
 
-  public boolean addCitizenToDatabase(Citizen citizen) {
+  public Citizen addCitizenToDatabase(Citizen citizen) {
     try (Connection conn = dataSource.getConnection();
          PreparedStatement stmt = conn.prepareStatement("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
                  Statement.RETURN_GENERATED_KEYS);
@@ -28,16 +28,62 @@ public class CoronaDao {
       stmt.setLong(3, citizen.getAge());
       stmt.setString(4, citizen.getEmail());
       stmt.setString(5, citizen.getTaj());
-//      if (searchForExistingTaj(citizen.getTaj()) == null) {
-        stmt.executeUpdate();
-//      } else {
-//        System.out.println("Már létezik ilyen TAJ-szám!");
-//
-//      }
+      stmt.executeUpdate();
+
+      Citizen temp = getIdByStatement(stmt);
+
+      return temp;
+
     } catch (SQLException se) {
       throw new IllegalStateException("Can not connect to database!", se);
     }
-    return true;
+  }
+
+  private Citizen getIdByStatement(PreparedStatement stmt) {
+    try (ResultSet rs = stmt.getGeneratedKeys()) {
+      if (rs.next()) {
+        return findCitizenById(rs.getLong(1));
+      }
+      throw new IllegalStateException("Can not get id!");
+    }
+    catch (SQLException se) {
+      throw new IllegalStateException("Can not select citizen!", se);
+    }
+  }
+
+  private Citizen findCitizenById(long id) {
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE citizen_id = ?")
+    ) {
+      ps.setLong(1, id);
+      List<Citizen> temp = selectCitizenPreparedStatement(ps);
+        if (temp.size() == 1) {
+          return temp.get(0);
+        }
+        throw new IllegalStateException("Citizen not found!");
+      }
+      catch (SQLException se) {
+      throw new IllegalStateException("Can not connect to database!", se);
+    }
+  }
+
+  private List<Citizen> selectCitizenPreparedStatement(PreparedStatement ps) {
+    List<Citizen> citizens = new ArrayList<>();
+    try (ResultSet rs = ps.executeQuery()) {
+      while (rs.next()) {
+        Citizen citizen = new Citizen(rs.getLong("citizen_id"),
+                rs.getString("citizen_name"),
+                rs.getInt("zip"),
+                rs.getInt("age"),
+                rs.getString("email"),
+                rs.getString("taj"));
+        citizens.add(citizen);
+      }
+      return citizens;
+    }
+    catch (SQLException se) {
+      throw new IllegalStateException("Can not found citizen by id!", se);
+    }
   }
 
   public List<Citizen> insertGroupOfCitizens(List<Citizen> citizens) {

@@ -78,7 +78,8 @@ public class CoronaSystem {
     }
 
     Citizen citizen = new Citizen(fullName, zip, age, email1, taj);
-    coronaDao.addCitizenToDatabase(citizen);
+    citizen = coronaDao.addCitizenToDatabase(citizen);
+
     return citizen;
   }
 
