@@ -206,7 +206,7 @@ public class CoronaSystem {
     String reportTime = LocalDateTime.now().format(formatter);
     String fileName = "Report_" + reportTime + ".csv";
     try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(Path.of(fileName)))) {
-      writer.println("Irányítószám;Még nem oltva;Egyszer oltva; Másorik oltást is megkapta");
+      writer.println("Irányítószám;Még nem oltva;Egyszer oltva;Második oltást is megkapta");
       for (Map.Entry<Integer, List<Integer>> temp : report.entrySet()) {
         writer.print(temp.getKey() + ";");
         writer.print(temp.getValue().get(0) + ";");
