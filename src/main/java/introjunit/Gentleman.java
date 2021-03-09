@@ -1,4 +1,4 @@
-package introjuit;
+package introjunit;
 
 public class Gentleman {
 
