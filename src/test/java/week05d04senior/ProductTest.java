@@ -2,16 +2,16 @@ package week05d04senior;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ProductTest {
+class ProductTest {
 
   @Test
-  public void testCurrencyIsNotInList() {
-    week05d04senior.Product product = new week05d04senior.Product(150, "HUF");
+  public void testConvertPrice() {
 
-    assertEquals(0.5, Math.round(product.convertCurrency("USD") * 100.0) / 100.0);
+    Product product = new Product(150, "HUF");
+    assertEquals(0.5, product.convertPrice("USD"));
+    assertEquals(45000.0, product.convertPrice("HUF"));
+
   }
-
 }
