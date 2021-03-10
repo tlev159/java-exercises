@@ -3,7 +3,7 @@ package week06d01;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeparatesSum {
+public class SeparatedSum {
 
   public List<Double> sum(String s) {
     String[] separated = s.split(";");
