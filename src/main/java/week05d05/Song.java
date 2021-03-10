@@ -7,20 +7,21 @@ public class Song {
   private String artist;
 
   public Song(String name, long lengthInSeconds, String artist) {
+    areTheParametersValid(name, lengthInSeconds, artist);
+    this.name = name;
+    this.lengthInSeconds = lengthInSeconds;
+    this.artist = artist;
+  }
+
+  private void areTheParametersValid(String name, long lengthInSeconds, String artist) {
     if (isEmpty(name)) {
       throw new IllegalArgumentException("Name must not be null or empty!");
-    } else {
-      this.name = name;
     }
     if (lengthInSeconds <= 0) {
       throw new IllegalArgumentException("The length of the song must not be shorter as 1 second!");
-    } else {
-      this.lengthInSeconds = lengthInSeconds;
     }
     if (isEmpty(artist)) {
       throw new IllegalArgumentException("Artist must not be null or empty!");
-    } else {
-      this.artist = artist;
     }
   }
 
