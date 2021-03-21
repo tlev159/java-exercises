@@ -1,8 +1,6 @@
 package coronaproject;
 
-import org.mariadb.jdbc.MariaDbDataSource;
-
-import java.sql.SQLException;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -27,20 +25,17 @@ public class CoronaVaccinationMain {
 
   public static void main(String[] args) {
 
+    CoronaDao coronaDao;
+    CoronaService coronaService;
+    try (
+            AnnotationConfigApplicationContext context =
+                    new AnnotationConfigApplicationContext(AppConfig.class)
+            ){
+      coronaDao = context.getBean(CoronaDao.class);
+      coronaService = new CoronaService(coronaDao);
+    }
     CoronaVaccinationMain cvm = new CoronaVaccinationMain();
     cvm.setCitizenValidation(new CitizenValidation());
-    MariaDbDataSource dataSource = new MariaDbDataSource();
-
-    try {
-      dataSource.setUrl("jdbc:mariadb://localhost:3306/corona?useUnicode=true");
-      dataSource.setUser("coronavaccinadmin");
-      dataSource.setPassword("coronavaccin");
-    } catch (SQLException se) {
-      throw new IllegalStateException("Can not connect to database!", se);
-    }
-
-    CoronaDao coronaDao = new CoronaDao(dataSource);
-    CoronaSystem coronaSystem = new CoronaSystem(coronaDao);
 
     Scanner scanner = new Scanner(System.in);
     int pushedMenu = 0;
@@ -61,19 +56,19 @@ public class CoronaVaccinationMain {
         case 1:
           System.out.println(ANSI_PURPLE + "A regisztrációt választotta!" + ANSI_RESET);
 //          coronaSystem.registrate();
-          Citizen citizen = coronaSystem.registrate();
+          Citizen citizen = coronaService.registrate();
           System.out.println(ANSI_GREEN + "Sikeres regisztáció!" + ANSI_RESET + "\n");
           System.out.println(ANSI_GREEN + "Az azonosítója: " + citizen.getId() + ANSI_RESET + "\n");
           break;
         case 2:
           System.out.println(ANSI_PURPLE + "A tömeges regisztrációt választotta fájlbeolvasással!");
           System.out.println("Kérem adja meg a fájl helyét" + ANSI_RESET);
-          coronaSystem.registerFromCvdFile();
+          coronaService.registerFromCvdFile();
           break;
 
         case 3:
           System.out.println(ANSI_PURPLE + "A 'generálás' menüt választotta!" + ANSI_RESET);
-          coronaSystem.generating();
+          coronaService.generating();
           break;
 
         case 4:
@@ -81,10 +76,10 @@ public class CoronaVaccinationMain {
           System.out.println(ANSI_PURPLE + "Kérem adja meg, hogy (1) oltást szeretne rögzíteni vagy (2) törölni szeretne!" + ANSI_RESET);
           int registerOrDelete = Integer.parseInt(scanner.nextLine());
           if (registerOrDelete == 1) {
-              coronaSystem.giveVaccin();
+              coronaService.giveVaccin();
               System.out.println("Az oltás regisztrálása megtörtént!");
             } else if (registerOrDelete == 2) {
-              coronaSystem.deleteVaccinationWithNotes();
+              coronaService.deleteVaccinationWithNotes();
               System.out.println("A törlés regisztációja megtörtént!");
             }
           break;
@@ -92,7 +87,7 @@ public class CoronaVaccinationMain {
         case 5:
           System.out.println(ANSI_PURPLE + "Készítem a riportot az aktuális adatok alapján!" + ANSI_RESET);
           Map<Integer, List<Integer>> report = new TreeMap<>();
-          report = coronaSystem.makeReport();
+          report = coronaService.makeReport();
 //          System.out.println(ANSI_BLUE + report + ANSI_RESET);
           break;
 

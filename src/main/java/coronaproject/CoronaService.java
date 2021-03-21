@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class CoronaSystem {
+public class CoronaService {
 
   public static final String ANSI_RESET = "\u001B[0m";
   public static final String ANSI_BLACK = "\u001B[30m";
@@ -22,7 +22,7 @@ public class CoronaSystem {
 
   private CoronaDao coronaDao;
 
-  public CoronaSystem(CoronaDao coronaDao) {
+  public CoronaService(CoronaDao coronaDao) {
     this.coronaDao = coronaDao;
   }
 

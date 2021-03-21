@@ -1,7 +1,9 @@
 package coronaproject;
 
 import org.mariadb.jdbc.MariaDbDataSource;
+import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,12 +11,13 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class CoronaDao {
 
-  private MariaDbDataSource dataSource;
+  private DataSource dataSource;
 
 
-  public CoronaDao(MariaDbDataSource dataSource) {
+  public CoronaDao(DataSource dataSource) {
     this.dataSource = dataSource;
   }
 

@@ -22,5 +22,5 @@ vaccination_date DATETIME NOT NULL,
 `status` VARCHAR2(10),
 note VARCHAR2(200),
 vaccination_type VARCHAR2(20),
-CONSTRAINT `citizenId` FOREIGN KEY (`citizen_id`) REFERENCES `corona`.`citizens` (`citizen_id`) ON UPDATE NO ACTION ON DELETE NO ACTION
+CONSTRAINT `citizenId` FOREIGN KEY (`citizen_id`) REFERENCES `corona`.`citizens` (`citizen_id`) ON UPDATE CASCADE ON ON DELETE CASCADE ON
 );
