@@ -1,5 +1,7 @@
 package coronaproject;
 
+import org.flywaydb.core.internal.jdbc.JdbcTemplate;
+import org.flywaydb.core.internal.jdbc.RowMapper;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.stereotype.Repository;
 
@@ -14,32 +16,17 @@ import java.util.List;
 @Repository
 public class CoronaDao {
 
-  private DataSource dataSource;
+  private MariaDbDataSource dataSource;
+  private JdbcTemplate jdbcTemplate;
 
-
-  public CoronaDao(DataSource dataSource) {
+  public CoronaDao(MariaDbDataSource dataSource) throws SQLException {
+    this.jdbcTemplate = new JdbcTemplate(dataSource.getConnection());
     this.dataSource = dataSource;
   }
 
-  public Citizen addCitizenToDatabase(Citizen citizen) {
-    try (Connection conn = dataSource.getConnection();
-         PreparedStatement stmt = conn.prepareStatement("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
-                 Statement.RETURN_GENERATED_KEYS);
-    ) {
-      stmt.setString(1, citizen.getFullName());
-      stmt.setInt(2, citizen.getZip());
-      stmt.setLong(3, citizen.getAge());
-      stmt.setString(4, citizen.getEmail());
-      stmt.setString(5, citizen.getTaj());
-      stmt.executeUpdate();
-
-      Citizen temp = getIdByStatement(stmt);
-
-      return temp;
-
-    } catch (SQLException se) {
-      throw new IllegalStateException("Can not connect to database!", se);
-    }
+  public void addCitizenToDatabase(Citizen citizen) throws SQLException {
+    jdbcTemplate.update("INSERT INTO citizens (citizen_name, zip, age, email, taj) VALUES (?,?,?,?,?)",
+                    citizen.getFullName(), citizen.getZip(), citizen.getAge(), citizen.getEmail(), citizen.getTaj());
   }
 
   private Citizen getIdByStatement(PreparedStatement stmt) {

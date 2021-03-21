@@ -17,7 +17,7 @@ public class AppConfig {
   private Environment environment;
 
   @Bean
-  public DataSource dataSource() {
+  public MariaDbDataSource dataSource() {
     MariaDbDataSource dataSource = new MariaDbDataSource();
     try {
       dataSource.setUrl(environment.getProperty("jdbc.url"));

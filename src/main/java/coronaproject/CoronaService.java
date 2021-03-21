@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -78,7 +79,14 @@ public class CoronaService {
     }
 
     Citizen citizen = new Citizen(fullName, zip, age, email1, taj);
-    citizen = coronaDao.addCitizenToDatabase(citizen);
+    System.out.println("A következő adatokkal történik a regisztráció:");
+    System.out.println(citizen);
+    try {
+      coronaDao.addCitizenToDatabase(citizen);
+
+    } catch (SQLException sqle) {
+      throw new IllegalStateException("Can not insert!", sqle);
+    }
 
     return citizen;
   }
