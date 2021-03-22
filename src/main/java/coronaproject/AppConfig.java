@@ -17,6 +17,11 @@ public class AppConfig {
   private Environment environment;
 
   @Bean
+  public  CoronaDao coronaDao() throws SQLException {
+    return new CoronaDao(dataSource());
+  }
+
+  @Bean
   public MariaDbDataSource dataSource() {
     MariaDbDataSource dataSource = new MariaDbDataSource();
     try {

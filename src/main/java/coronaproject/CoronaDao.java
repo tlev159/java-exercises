@@ -1,7 +1,6 @@
 package coronaproject;
 
-import org.flywaydb.core.internal.jdbc.JdbcTemplate;
-import org.flywaydb.core.internal.jdbc.RowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.stereotype.Repository;
 
@@ -19,8 +18,8 @@ public class CoronaDao {
   private MariaDbDataSource dataSource;
   private JdbcTemplate jdbcTemplate;
 
-  public CoronaDao(MariaDbDataSource dataSource) throws SQLException {
-    this.jdbcTemplate = new JdbcTemplate(dataSource.getConnection());
+  public CoronaDao(MariaDbDataSource dataSource) {
+    this.jdbcTemplate = new JdbcTemplate(dataSource);
     this.dataSource = dataSource;
   }
 
@@ -29,33 +28,35 @@ public class CoronaDao {
                     citizen.getFullName(), citizen.getZip(), citizen.getAge(), citizen.getEmail(), citizen.getTaj());
   }
 
-  private Citizen getIdByStatement(PreparedStatement stmt) {
-    try (ResultSet rs = stmt.getGeneratedKeys()) {
-      if (rs.next()) {
-        return findCitizenById(rs.getLong(1));
-      }
-      throw new IllegalStateException("Can not get id!");
-    }
-    catch (SQLException se) {
-      throw new IllegalStateException("Can not select citizen!", se);
-    }
-  }
+//  private Citizen getIdByStatement(PreparedStatement stmt) {
+//    try (ResultSet rs = stmt.getGeneratedKeys()) {
+//      if (rs.next()) {
+//        return findCitizenById(rs.getLong(1));
+//      }
+//      throw new IllegalStateException("Can not get id!");
+//    }
+//    catch (SQLException se) {
+//      throw new IllegalStateException("Can not select citizen!", se);
+//    }
+//  }
 
-  private Citizen findCitizenById(long id) {
-    try (Connection conn = dataSource.getConnection();
-         PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE citizen_id = ?")
-    ) {
-      ps.setLong(1, id);
-      List<Citizen> temp = selectCitizenPreparedStatement(ps);
-        if (temp.size() == 1) {
-          return temp.get(0);
-        }
-        throw new IllegalStateException("Citizen not found!");
-      }
-      catch (SQLException se) {
-      throw new IllegalStateException("Can not connect to database!", se);
-    }
-  }
+//  private Citizen findCitizenById(long id) {
+//    return jdbcTemplate.queryForObject("SELECT * FROM citizens WHERE citizen_id = ?", id);
+//
+//    try (Connection conn = dataSource.getConnection();
+//         PreparedStatement ps = conn.prepareStatement("SELECT * FROM citizens WHERE citizen_id = ?")
+//    ) {
+//      ps.setLong(1, id);
+//      List<Citizen> temp = selectCitizenPreparedStatement(ps);
+//        if (temp.size() == 1) {
+//          return temp.get(0);
+//        }
+//        throw new IllegalStateException("Citizen not found!");
+//      }
+//      catch (SQLException se) {
+//      throw new IllegalStateException("Can not connect to database!", se);
+//    }
+//  }
 
   private List<Citizen> selectCitizenPreparedStatement(PreparedStatement ps) {
     List<Citizen> citizens = new ArrayList<>();

@@ -33,7 +33,12 @@ class CoronaDaoTest {
     flyway.clean();
     flyway.migrate();
 
-    coronaDao = new CoronaDao(dataSource);
+    try {
+      coronaDao = new CoronaDao(dataSource);
+    }
+    catch (SQLException sqle) {
+      throw new IllegalStateException("Can not connect!", sqle);
+    }
 
   }
 
